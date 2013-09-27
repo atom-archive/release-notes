@@ -20,12 +20,18 @@ eachStatusBarRightArea = (callback) ->
       statusBarRight = pane.find('.status-bar-right')
       callback(statusBarRight) if statusBarRight.length > 0
 
+# Don't serialize this state, as it's only valid until the application restarts
+updateAvailable = false
+
 module.exports =
   activate: (state) ->
+    rootView.on 'window:update-available', (event, version) ->
+      updateAvailable = true
+
     project.registerOpener (filePath) ->
       createReleaseNotesView(uri: releaseNotesUri) if filePath is releaseNotesUri
 
     eachStatusBarRightArea (statusBarRight) ->
-      releaseNotesStatusBar = new ReleaseNoteStatusBar()
+      releaseNotesStatusBar = new ReleaseNoteStatusBar({updateAvailable})
       statusBarRight.append(releaseNotesStatusBar)
 

@@ -23,7 +23,7 @@ class ReleaseNotesView extends View
   serialize: ->
     deserializer: @constructor.name
 
-  initialize: (options) ->
+  initialize: (options={}) ->
     token = @getGithubToken()
     @requestLatestReleaseNotes(token) if token
 
