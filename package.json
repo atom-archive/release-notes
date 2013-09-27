@@ -2,7 +2,7 @@
   "name": "release-notes",
   "main": "./lib/release-notes",
   "version": "0.0.0",
-  "description": "Notifiers users of the latest changes",
+  "description": "Notifies users of the latest changes",
   "repository": {
     "type": "git",
     "url": "https://github.com/atom/release-notes.git"
