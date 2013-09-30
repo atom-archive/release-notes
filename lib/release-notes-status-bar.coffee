@@ -4,7 +4,7 @@ module.exports =
 class ReleaseNotesStatusBar extends View
   @content: ->
     @div class: 'release-notes-status inline-block', =>
-     @span outlet: 'status', type: 'button', class: 'status icon icon-rocket'
+     @span outlet: 'status', type: 'button', class: 'status icon icon-squirrel'
 
   initialize: (options={}) ->
     @status.addClass('update-available') if atom.getLoadSettings().updateAvailable
