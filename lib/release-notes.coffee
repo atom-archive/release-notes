@@ -19,6 +19,7 @@ eachStatusBarRightArea = (callback) ->
     setTimeout ->
       statusBarRight = pane.find('.status-bar-right')
       callback(statusBarRight) if statusBarRight.length > 0
+    , 10
 
 # Don't serialize this state, as it's only valid until the application restarts
 updateVersion = null
@@ -34,4 +35,3 @@ module.exports =
     eachStatusBarRightArea (statusBarRight) ->
       releaseNotesStatusBar = new ReleaseNoteStatusBar({updateVersion})
       statusBarRight.append(releaseNotesStatusBar)
-

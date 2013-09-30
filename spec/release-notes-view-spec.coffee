@@ -1,21 +1,47 @@
-ReleaseNotesView = require '../lib/release-notes-view'
-RootView = require 'root-view'
+fs = require 'fs'
+path = require 'path'
 
-# This spec is focused because it starts with an `f`. Remove the `f`
-# to unfocus the spec.
-#
-# Press meta-alt-ctrl-s to run the specs
-fdescribe "ReleaseNotesView", ->
-  releaseNotes = null
+ReleaseNotesView = require '../lib/release-notes-view'
+{RootView} = require 'atom'
+
+describe "ReleaseNotesView", ->
+  [releaseNotes, releaseNotesView, releasesRequest, token] = []
 
   beforeEach ->
-    window.rootView = new RootView
-    releaseNotes = atom.activatePackage('releaseNotes', immediate: true)
+    spyOn(ReleaseNotesView.prototype, 'initialize')
+    releasesRequest = spyOn(ReleaseNotesView.prototype, 'requestLatestReleaseNotes').andCallFake ->
+      data = fs.readFileSync(path.join(__dirname, 'fixtures', 'releases-response.json'))
+      releaseNotesView.onReleaseNotesReceived(null, {}, data)
 
-  describe "when the release-notes:toggle event is triggered", ->
-    it "attaches and then detaches the view", ->
-      expect(rootView.find('.release-notes')).not.toExist()
-      rootView.trigger 'release-notes:toggle'
-      expect(rootView.find('.release-notes')).toExist()
-      rootView.trigger 'release-notes:toggle'
-      expect(rootView.find('.release-notes')).not.toExist()
+    window.rootView = new RootView
+    atom.activatePackage('release-notes', immediate: true)
+    rootView.open('atom://release-notes')
+
+    releaseNotes = rootView.find('.release-notes')
+    releaseNotesView = releaseNotes.view()
+
+  describe "with authorization", ->
+    beforeEach ->
+      spyOn(releaseNotesView, 'getLocalToken').andReturn('token')
+
+    describe "when in devMode", ->
+      beforeEach -> releaseNotesView.fetch()
+
+      it "renders draft release notes", ->
+        expect(releaseNotes.find('.description h1').text()).toBe 'v27.0.0 - Full Speed Ahead'
+
+    describe "when in release mode", ->
+      beforeEach ->
+        spyOn(releaseNotesView, 'showUnreleased').andReturn(false)
+        releaseNotesView.fetch()
+
+      it "renders the latest release's notes", ->
+        expect(releaseNotes.find('.description h1').text()).toBe 'v26.0.0 - Last Release'
+
+  describe "without authorization", ->
+    beforeEach ->
+      spyOn(releaseNotesView, 'getLocalToken').andReturn(null)
+      releaseNotesView.fetch()
+
+    it "prompts for authorization", ->
+      expect(releaseNotes.find('.authorization').css('display')).not.toEqual 'none'
