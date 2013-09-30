@@ -21,17 +21,17 @@ eachStatusBarRightArea = (callback) ->
       callback(statusBarRight) if statusBarRight.length > 0
 
 # Don't serialize this state, as it's only valid until the application restarts
-updateAvailable = false
+updateVersion = null
 
 module.exports =
   activate: (state) ->
     rootView.on 'window:update-available', (event, version) ->
-      updateAvailable = true
+      updateVersion = version
 
     project.registerOpener (filePath) ->
       createReleaseNotesView(uri: releaseNotesUri) if filePath is releaseNotesUri
 
     eachStatusBarRightArea (statusBarRight) ->
-      releaseNotesStatusBar = new ReleaseNoteStatusBar({updateAvailable})
+      releaseNotesStatusBar = new ReleaseNoteStatusBar({updateVersion})
       statusBarRight.append(releaseNotesStatusBar)
 

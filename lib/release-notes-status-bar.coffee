@@ -7,7 +7,7 @@ class ReleaseNotesStatusBar extends View
      @span outlet: 'status', type: 'button', class: 'status icon icon-squirrel'
 
   initialize: (options={}) ->
-    @status.addClass('update-available') if atom.getLoadSettings().updateAvailable
+    @status.addClass('update-available') if options.updateVersion
 
     @status.on 'click', =>
       rootView.open('atom://release-notes')
