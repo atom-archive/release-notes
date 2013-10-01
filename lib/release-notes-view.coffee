@@ -65,6 +65,7 @@ class ReleaseNotesView extends View
     roaster latestRelease.body, (error, contents) =>
       @description.html(contents)
       @description.prepend("<h1>#{latestRelease.tag_name} - #{latestRelease.name}</h1>")
+      @description.append('<br><p><span class="inline-block highlight-info">To update:</span> close Atom and reopen it.</p>')
 
   # Private
   findLatestRelease: (data) ->
