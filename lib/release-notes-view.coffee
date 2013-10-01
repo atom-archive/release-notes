@@ -23,19 +23,25 @@ class ReleaseNotesView extends View
   serialize: ->
     deserializer: @constructor.name
 
-  initialize: (options) ->
+  initialize: (options={}) ->
+    @fetch()
+
+  fetch: ->
     token = @getGithubToken()
     @requestLatestReleaseNotes(token) if token
 
   # Private
   getGithubToken: ->
-    token = keytar.getPassword('github.com', 'github')
+    token = @getLocalToken()
     unless token
       @authorization.show()
       @login.on 'click', ->
         rootView.trigger('github:sign-in')
         false
     token
+
+  getLocalToken: ->
+    keytar.getPassword('github.com', 'github')
 
   # Private
   showUnreleased: ->
@@ -54,7 +60,7 @@ class ReleaseNotesView extends View
   onReleaseNotesReceived: (error, response, body) =>
     return console.warn error if error
 
-    data = JSON.parse(response.body)
+    data = JSON.parse(body)
     latestRelease = @findLatestRelease(data)
     roaster latestRelease.body, (error, contents) =>
       @description.html(contents)
