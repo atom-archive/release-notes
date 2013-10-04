@@ -1,5 +1,4 @@
-{View} = require 'space-pen'
-{_} = require 'atom'
+{_, View} = require 'atom'
 
 request = require 'request'
 keytar = require 'keytar'
