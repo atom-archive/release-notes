@@ -29,6 +29,8 @@ module.exports =
     rootView.on 'window:update-available', (event, version) ->
       updateVersion = version
 
+    rootView.command 'release-notes:show', -> rootView.open('atom://release-notes')
+
     project.registerOpener (filePath) ->
       createReleaseNotesView(uri: releaseNotesUri) if filePath is releaseNotesUri
 
