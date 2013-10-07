@@ -1,5 +1,4 @@
-{View} = require 'space-pen'
-{_} = require 'atom'
+{_, View} = require 'atom'
 
 request = require 'request'
 keytar = require 'keytar'
@@ -62,6 +61,7 @@ class ReleaseNotesView extends View
 
     data = JSON.parse(body)
     latestRelease = @findLatestRelease(data)
+    atom.config.set('release-notes.viewedVersion', latestRelease.tag_name)
     roaster latestRelease.body, (error, contents) =>
       @description.html(contents)
       @description.prepend("<h1>#{latestRelease.tag_name} - #{latestRelease.name}</h1>")

@@ -21,17 +21,19 @@ eachStatusBarRightArea = (callback) ->
       callback(statusBarRight) if statusBarRight.length > 0
     , 10
 
-# Don't serialize this state, as it's only valid until the application restarts
-updateVersion = null
-
 module.exports =
+  # Don't serialize this state, as it's only valid until the application restarts
+  updateVersion: null
+
   activate: (state) ->
-    rootView.on 'window:update-available', (event, version) ->
-      updateVersion = version
+    rootView.on 'window:update-available', (event, version) =>
+      @updateVersion = version
 
     project.registerOpener (filePath) ->
       createReleaseNotesView(uri: releaseNotesUri) if filePath is releaseNotesUri
 
-    eachStatusBarRightArea (statusBarRight) ->
-      releaseNotesStatusBar = new ReleaseNoteStatusBar({updateVersion})
+    rootView.command 'release-notes:show', -> rootView.open('atom://release-notes')
+
+    eachStatusBarRightArea (statusBarRight) =>
+      releaseNotesStatusBar = new ReleaseNoteStatusBar({@updateVersion})
       statusBarRight.append(releaseNotesStatusBar)
