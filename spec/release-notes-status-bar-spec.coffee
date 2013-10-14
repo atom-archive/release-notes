@@ -13,7 +13,7 @@ describe "ReleaseNotesStatusBar", ->
 
   describe "with no viewed version", ->
     beforeEach ->
-      rootView.open('sample.js')
+      rootView.openSync('sample.js')
       advanceClock(10)
 
       releaseNotesStatus = rootView.find('.release-notes-status .status')
@@ -33,7 +33,7 @@ describe "ReleaseNotesStatusBar", ->
     beforeEach ->
       spyOn(atom.config, 'get').andReturn('v27.0.0')
 
-      rootView.open('sample.js')
+      rootView.openSync('sample.js')
       advanceClock(10)
 
       releaseNotesStatus = rootView.find('.release-notes-status .status')

@@ -15,7 +15,7 @@ describe "ReleaseNotesView", ->
 
     window.rootView = new RootView
     atom.activatePackage('release-notes', immediate: true)
-    rootView.open('atom://release-notes')
+    rootView.openSync('atom://release-notes')
 
     releaseNotes = rootView.find('.release-notes')
     releaseNotesView = releaseNotes.view()
