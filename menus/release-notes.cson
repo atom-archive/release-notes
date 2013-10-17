@@ -1,0 +1,10 @@
+'menu': [
+  'label': 'Packages'
+  'submenu': [
+    'label': 'Release Notes'
+    'submenu': [
+      'label': 'Show Latest'
+      'command': 'release-notes:show'
+    ]
+  ]
+]
