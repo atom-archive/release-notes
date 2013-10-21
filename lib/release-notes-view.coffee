@@ -27,19 +27,23 @@ class ReleaseNotesView extends View
 
   fetch: ->
     token = @getGithubToken()
-    @requestLatestReleaseNotes(token) if token
+    if token
+      @requestLatestReleaseNotes(token)
+    else
+      @authorization.show()
+      @login.on 'click', =>
+        rootView.trigger('github:sign-in')
+        rootView.on('github-sign-in:succeeded', @onSuccessfulSignIn)
+        false
+
+  # Private
+  onSuccessfulSignIn:  (event, token) =>
+    @authorization.hide()
+    @requestLatestReleaseNotes(token)
+    rootView.off 'github-sign-in:succeeded', @onSuccessfulSignIn
 
   # Private
   getGithubToken: ->
-    token = @getLocalToken()
-    unless token
-      @authorization.show()
-      @login.on 'click', ->
-        rootView.trigger('github:sign-in')
-        false
-    token
-
-  getLocalToken: ->
     keytar.getPassword('github.com', 'github')
 
   # Private
