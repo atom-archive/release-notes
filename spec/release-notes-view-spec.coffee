@@ -22,7 +22,7 @@ describe "ReleaseNotesView", ->
 
   describe "with authorization", ->
     beforeEach ->
-      spyOn(releaseNotesView, 'getLocalToken').andReturn('token')
+      spyOn(releaseNotesView, 'getGithubToken').andReturn('token')
 
     describe "when in devMode", ->
       beforeEach -> releaseNotesView.fetch()
@@ -40,7 +40,7 @@ describe "ReleaseNotesView", ->
 
   describe "without authorization", ->
     beforeEach ->
-      spyOn(releaseNotesView, 'getLocalToken').andReturn(null)
+      spyOn(releaseNotesView, 'getGithubToken').andReturn(null)
       releaseNotesView.fetch()
 
     it "prompts for authorization", ->
