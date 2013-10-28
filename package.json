@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "request": "2.27.0",
-    "keytar": "0.10.0",
+    "keytar": "0.12.0",
     "roaster": "0.0.8"
   },
   "publishConfig": {
