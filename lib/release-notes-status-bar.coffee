@@ -12,7 +12,7 @@ class ReleaseNotesStatusBar extends View
     @status.on 'click', =>
       rootView.open('atom://release-notes')
 
-    rootView.command 'window:update-available', (event, version) =>
+    @subscribe rootView, 'window:update-available', (event, version) =>
       @updateVersion = version
       @onlyShowIfNewerUpdate()
 
