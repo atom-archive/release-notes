@@ -16,7 +16,7 @@ class ReleaseNotesStatusBar extends View
       @updateVersion = version
       @onlyShowIfNewerUpdate()
 
-    atom.config.observe 'release-notes.viewedVersion', (version) =>
+    @observeConfig 'release-notes.viewedVersion', (version) =>
       @onlyShowIfNewerUpdate(version)
 
   onlyShowIfNewerUpdate: (viewedVersion) ->
