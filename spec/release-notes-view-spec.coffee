@@ -13,11 +13,11 @@ describe "ReleaseNotesView", ->
       data = fs.readFileSync(path.join(__dirname, 'fixtures', 'releases-response.json'))
       releaseNotesView.onReleaseNotesReceived(null, {}, data)
 
-    window.rootView = new RootView
-    atom.activatePackage('release-notes', immediate: true)
-    rootView.openSync('atom://release-notes')
+    atom.rootView = new RootView
+    atom.packages.activatePackage('release-notes', immediate: true)
+    atom.rootView.openSync('atom://release-notes')
 
-    releaseNotes = rootView.find('.release-notes')
+    releaseNotes = atom.rootView.find('.release-notes')
     releaseNotesView = releaseNotes.view()
 
   describe "with authorization", ->

@@ -6,17 +6,17 @@ describe "ReleaseNotesStatusBar", ->
   [releaseNotesStatus, releaseNotesStatusBar]  = []
 
   beforeEach ->
-    window.rootView = new RootView
+    atom.rootView = new RootView
     atom.packages.activatePackage('status-bar', immediate: true)
     pack = atom.packages.activatePackage('release-notes', immediate: true)
     pack.mainModule.updateVersion = null
 
   describe "with no viewed version", ->
     beforeEach ->
-      rootView.openSync('sample.js')
+      atom.rootView.openSync('sample.js')
       advanceClock(10)
 
-      releaseNotesStatus = rootView.find('.release-notes-status .status')
+      releaseNotesStatus = atom.rootView.find('.release-notes-status .status')
       releaseNotesStatusBar = releaseNotesStatus.view()
 
     describe "with no pending update", ->
@@ -24,7 +24,7 @@ describe "ReleaseNotesStatusBar", ->
         expect(releaseNotesStatus.is('display')).not.toBe 'none'
 
     describe "with a pending update", ->
-      beforeEach -> rootView.trigger 'window:update-available', 'v28.0.0'
+      beforeEach -> atom.rootView.trigger 'window:update-available', 'v28.0.0'
 
       it "renders", ->
         expect(releaseNotesStatus.css('display')).not.toBe 'none'
@@ -33,10 +33,10 @@ describe "ReleaseNotesStatusBar", ->
     beforeEach ->
       spyOn(atom.config, 'get').andReturn('v27.0.0')
 
-      rootView.openSync('sample.js')
+      atom.rootView.openSync('sample.js')
       advanceClock(10)
 
-      releaseNotesStatus = rootView.find('.release-notes-status .status')
+      releaseNotesStatus = atom.rootView.find('.release-notes-status .status')
       releaseNotesStatusBar = releaseNotesStatus.view()
 
     describe "with no pending update", ->
@@ -44,7 +44,7 @@ describe "ReleaseNotesStatusBar", ->
         expect(releaseNotesStatus.css('display')).toBe 'none'
 
     describe "with a pending update", ->
-      beforeEach -> rootView.trigger 'window:update-available', 'v28.0.0'
+      beforeEach -> atom.rootView.trigger 'window:update-available', 'v28.0.0'
 
       it "renders", ->
         expect(releaseNotesStatus.css('display')).not.toBe 'none'
@@ -53,7 +53,7 @@ describe "ReleaseNotesStatusBar", ->
       [rootViewOpen] = []
 
       beforeEach ->
-        rootViewOpen = spyOn(rootView, 'open')
+        rootViewOpen = spyOn(atom.rootView, 'open')
         releaseNotesStatus.trigger('click')
 
       it "opens the release notes view", ->

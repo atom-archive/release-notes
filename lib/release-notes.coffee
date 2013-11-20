@@ -10,30 +10,27 @@ createReleaseNotesView = (state) ->
 deserializer =
   name: 'ReleaseNotesView'
   deserialize: (state) -> createReleaseNotesView(state)
-registerDeserializer(deserializer)
-
-eachStatusBarRightArea = (callback) ->
-  rootView.eachPane (pane) ->
-    # The timeout is required, so that the status bar can initialize itself
-    # before we attempt to locate the .status-bar-right area.
-    setTimeout ->
-      statusBarRight = pane.find('.status-bar-right')
-      callback(statusBarRight) if statusBarRight.length > 0
-    , 10
+atom.deserializers.add(deserializer)
 
 module.exports =
   # Don't serialize this state, as it's only valid until the application restarts
   updateVersion: null
 
   activate: (state) ->
-    rootView.on 'window:update-available', (event, version) =>
+    atom.rootView.on 'window:update-available', (event, version) =>
       @updateVersion = version
 
-    project.registerOpener (filePath) ->
+    atom.project.registerOpener (filePath) ->
       createReleaseNotesView(uri: releaseNotesUri) if filePath is releaseNotesUri
 
-    rootView.command 'release-notes:show', -> rootView.open('atom://release-notes')
+    atom.rootView.command 'release-notes:show', ->
+      atom.rootView.open('atom://release-notes')
 
-    eachStatusBarRightArea (statusBarRight) =>
-      releaseNotesStatusBar = new ReleaseNoteStatusBar({@updateVersion})
-      statusBarRight.append(releaseNotesStatusBar)
+    # The timeout is required, so that the status bar can initialize itself
+    # before we attempt to locate the .status-bar-right area.
+    setTimeout ->
+      statusBarRight = atom.rootView.find('.status-bar-right')
+      if statusBarRight.length > 0
+        releaseNotesStatusBar = new ReleaseNoteStatusBar({@updateVersion})
+        statusBarRight.append(releaseNotesStatusBar)
+    , 10
