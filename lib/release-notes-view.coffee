@@ -32,15 +32,15 @@ class ReleaseNotesView extends View
     else
       @authorization.show()
       @login.on 'click', =>
-        atom.rootView.trigger('github:sign-in')
-        atom.rootView.on('github-sign-in:succeeded', @onSuccessfulSignIn)
+        atom.workspaceView.trigger('github:sign-in')
+        atom.workspaceView.on('github-sign-in:succeeded', @onSuccessfulSignIn)
         false
 
   # Private
   onSuccessfulSignIn:  (event, token) =>
     @authorization.hide()
     @requestLatestReleaseNotes(token)
-    atom.rootView.off 'github-sign-in:succeeded', @onSuccessfulSignIn
+    atom.workspaceView.off 'github-sign-in:succeeded', @onSuccessfulSignIn
 
   # Private
   getGithubToken: ->

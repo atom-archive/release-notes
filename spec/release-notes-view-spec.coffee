@@ -2,7 +2,7 @@ fs = require 'fs'
 path = require 'path'
 
 ReleaseNotesView = require '../lib/release-notes-view'
-{RootView} = require 'atom'
+{WorkspaceView} = require 'atom'
 
 describe "ReleaseNotesView", ->
   [releaseNotes, releaseNotesView, releasesRequest, token] = []
@@ -13,11 +13,11 @@ describe "ReleaseNotesView", ->
       data = fs.readFileSync(path.join(__dirname, 'fixtures', 'releases-response.json'))
       releaseNotesView.onReleaseNotesReceived(null, {}, data)
 
-    atom.rootView = new RootView
+    atom.workspaceView = new WorkspaceView
     atom.packages.activatePackage('release-notes', immediate: true)
-    atom.rootView.openSync('atom://release-notes')
+    atom.workspaceView.openSync('atom://release-notes')
 
-    releaseNotes = atom.rootView.find('.release-notes')
+    releaseNotes = atom.workspaceView.find('.release-notes')
     releaseNotesView = releaseNotes.view()
 
   describe "with authorization", ->

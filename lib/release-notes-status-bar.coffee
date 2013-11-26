@@ -10,9 +10,9 @@ class ReleaseNotesStatusBar extends View
     @onlyShowIfNewerUpdate()
 
     @status.on 'click', =>
-      atom.rootView.open('atom://release-notes')
+      atom.workspaceView.open('atom://release-notes')
 
-    @subscribe atom.rootView, 'window:update-available', (event, version) =>
+    @subscribe atom.workspaceView, 'window:update-available', (event, version) =>
       @updateVersion = version
       @onlyShowIfNewerUpdate()
 

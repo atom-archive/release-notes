@@ -17,19 +17,19 @@ module.exports =
   updateVersion: null
 
   activate: (state) ->
-    atom.rootView.on 'window:update-available', (event, version) =>
+    atom.workspaceView.on 'window:update-available', (event, version) =>
       @updateVersion = version
 
     atom.project.registerOpener (filePath) ->
       createReleaseNotesView(uri: releaseNotesUri) if filePath is releaseNotesUri
 
-    atom.rootView.command 'release-notes:show', ->
-      atom.rootView.open('atom://release-notes')
+    atom.workspaceView.command 'release-notes:show', ->
+      atom.workspaceView.open('atom://release-notes')
 
     # The timeout is required, so that the status bar can initialize itself
     # before we attempt to locate the .status-bar-right area.
     setTimeout ->
-      statusBarRight = atom.rootView.find('.status-bar-right')
+      statusBarRight = atom.workspaceView.find('.status-bar-right')
       if statusBarRight.length > 0
         releaseNotesStatusBar = new ReleaseNoteStatusBar({@updateVersion})
         statusBarRight.append(releaseNotesStatusBar)

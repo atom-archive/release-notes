@@ -1,22 +1,22 @@
 {_} = require 'atom'
 ReleaseNotesStatusBar = require '../lib/release-notes-status-bar'
-{RootView} = require 'atom'
+{WorkspaceView} = require 'atom'
 
 describe "ReleaseNotesStatusBar", ->
   [releaseNotesStatus, releaseNotesStatusBar]  = []
 
   beforeEach ->
-    atom.rootView = new RootView
+    atom.workspaceView = new WorkspaceView
     atom.packages.activatePackage('status-bar', immediate: true)
     pack = atom.packages.activatePackage('release-notes', immediate: true)
     pack.mainModule.updateVersion = null
 
   describe "with no viewed version", ->
     beforeEach ->
-      atom.rootView.openSync('sample.js')
+      atom.workspaceView.openSync('sample.js')
       advanceClock(10)
 
-      releaseNotesStatus = atom.rootView.find('.release-notes-status .status')
+      releaseNotesStatus = atom.workspaceView.find('.release-notes-status .status')
       releaseNotesStatusBar = releaseNotesStatus.view()
 
     describe "with no pending update", ->
@@ -24,7 +24,7 @@ describe "ReleaseNotesStatusBar", ->
         expect(releaseNotesStatus.is('display')).not.toBe 'none'
 
     describe "with a pending update", ->
-      beforeEach -> atom.rootView.trigger 'window:update-available', 'v28.0.0'
+      beforeEach -> atom.workspaceView.trigger 'window:update-available', 'v28.0.0'
 
       it "renders", ->
         expect(releaseNotesStatus.css('display')).not.toBe 'none'
@@ -33,10 +33,10 @@ describe "ReleaseNotesStatusBar", ->
     beforeEach ->
       spyOn(atom.config, 'get').andReturn('v27.0.0')
 
-      atom.rootView.openSync('sample.js')
+      atom.workspaceView.openSync('sample.js')
       advanceClock(10)
 
-      releaseNotesStatus = atom.rootView.find('.release-notes-status .status')
+      releaseNotesStatus = atom.workspaceView.find('.release-notes-status .status')
       releaseNotesStatusBar = releaseNotesStatus.view()
 
     describe "with no pending update", ->
@@ -44,17 +44,17 @@ describe "ReleaseNotesStatusBar", ->
         expect(releaseNotesStatus.css('display')).toBe 'none'
 
     describe "with a pending update", ->
-      beforeEach -> atom.rootView.trigger 'window:update-available', 'v28.0.0'
+      beforeEach -> atom.workspaceView.trigger 'window:update-available', 'v28.0.0'
 
       it "renders", ->
         expect(releaseNotesStatus.css('display')).not.toBe 'none'
 
     describe "clicking on the status", ->
-      [rootViewOpen] = []
+      [workspaceViewOpen] = []
 
       beforeEach ->
-        rootViewOpen = spyOn(atom.rootView, 'open')
+        workspaceViewOpen = spyOn(atom.workspaceView, 'open')
         releaseNotesStatus.trigger('click')
 
       it "opens the release notes view", ->
-        expect(rootViewOpen.mostRecentCall.args[0]).toBe 'atom://release-notes'
+        expect(workspaceViewOpen.mostRecentCall.args[0]).toBe 'atom://release-notes'
