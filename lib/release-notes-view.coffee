@@ -44,7 +44,7 @@ class ReleaseNotesView extends View
 
   # Private
   getGithubToken: ->
-    keytar.getPassword('github.com', 'github')
+    keytar.getPassword('Atom GitHub API Token', 'github')
 
   # Private
   showUnreleased: ->
