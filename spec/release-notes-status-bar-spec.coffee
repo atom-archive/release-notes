@@ -2,7 +2,7 @@
 ReleaseNotesStatusBar = require '../lib/release-notes-status-bar'
 {WorkspaceView} = require 'atom'
 
-describe "ReleaseNotesStatusBar", ->
+fdescribe "ReleaseNotesStatusBar", ->
   [releaseNotesStatus, releaseNotesStatusBar]  = []
 
   beforeEach ->
@@ -14,14 +14,13 @@ describe "ReleaseNotesStatusBar", ->
   describe "with no viewed version", ->
     beforeEach ->
       atom.workspaceView.openSync('sample.js')
-      advanceClock(10)
 
-      releaseNotesStatus = atom.workspaceView.find('.release-notes-status .status')
+      releaseNotesStatus = atom.workspaceView.find('.release-notes-status')
       releaseNotesStatusBar = releaseNotesStatus.view()
 
     describe "with no pending update", ->
       it "renders", ->
-        expect(releaseNotesStatus.is('display')).not.toBe 'none'
+        expect(releaseNotesStatus.css('display')).not.toBe 'none'
 
     describe "with a pending update", ->
       beforeEach -> atom.workspaceView.trigger 'window:update-available', 'v28.0.0'
@@ -34,12 +33,13 @@ describe "ReleaseNotesStatusBar", ->
       spyOn(atom.config, 'get').andReturn('v27.0.0')
 
       atom.workspaceView.openSync('sample.js')
-      advanceClock(10)
 
-      releaseNotesStatus = atom.workspaceView.find('.release-notes-status .status')
+      releaseNotesStatus = atom.workspaceView.find('.release-notes-status')
       releaseNotesStatusBar = releaseNotesStatus.view()
 
     describe "with no pending update", ->
+      beforeEach -> atom.workspaceView.trigger 'window:update-available', null
+
       it "doesn't render", ->
         expect(releaseNotesStatus.css('display')).toBe 'none'
 
