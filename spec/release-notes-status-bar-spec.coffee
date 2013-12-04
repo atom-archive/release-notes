@@ -2,7 +2,7 @@
 ReleaseNotesStatusBar = require '../lib/release-notes-status-bar'
 {WorkspaceView} = require 'atom'
 
-fdescribe "ReleaseNotesStatusBar", ->
+describe "ReleaseNotesStatusBar", ->
   [releaseNotesStatus, releaseNotesStatusBar]  = []
 
   beforeEach ->
