@@ -3,7 +3,7 @@
 module.exports =
 class ReleaseNotesStatusBar extends View
   @content: ->
-    @span outlet: 'status', type: 'button', class: 'release-notes-status icon icon-squirrel inline-block'
+    @span type: 'button', class: 'release-notes-status icon icon-squirrel inline-block'
 
   initialize: ({@updateVersion}={})->
     @onlyShowIfNewerUpdate()
