@@ -57,6 +57,7 @@ class ReleaseNotesView extends View
       url: "https://api.github.com/repos/atom/atom/releases?access_token=#{token}"
       headers:
         'Accept': 'application/vnd.github.manifold-preview'
+        'User-Agent': navigator.userAgent
     , @onReleaseNotesReceived
 
   # Private
