@@ -3,13 +3,12 @@
 module.exports =
 class ReleaseNotesStatusBar extends View
   @content: ->
-    @div class: 'release-notes-status inline-block', =>
-     @span outlet: 'status', type: 'button', style: 'display:none', class: 'status icon icon-squirrel'
+    @span type: 'button', class: 'release-notes-status icon icon-squirrel inline-block'
 
   initialize: ({@updateVersion}={})->
     @onlyShowIfNewerUpdate()
 
-    @status.on 'click', =>
+    @on 'click', =>
       atom.workspaceView.open('atom://release-notes')
 
     @subscribe atom.workspaceView, 'window:update-available', (event, version) =>
@@ -23,8 +22,8 @@ class ReleaseNotesStatusBar extends View
     viewedVersion ?= @getViewedVersion()
 
     if (@updateVersion and @updateVersion != viewedVersion) or !viewedVersion
-      @status.show()
+      @show()
     else
-      @status.hide()
+      @hide()
 
   getViewedVersion: -> atom.config.get('release-notes.viewedVersion')

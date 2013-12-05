@@ -8,9 +8,9 @@ module.exports =
 class ReleaseNotesView extends View
   @content: ->
     @div class: 'release-notes padded pane-item', tabindex: -1, =>
-      @div class: 'description', outlet: 'description'
-      @div class: 'authorization', style: 'display:none', outlet: 'authorization', =>
-        @h1 "Authorization Required"
+      @section class: 'description', outlet: 'description'
+      @section class: 'authorization', style: 'display:none', outlet: 'authorization', =>
+        @h1 class: 'section-heading', "Authorization Required"
         @p "You must be logged in to GitHub to access the release notes."
         @button "Sign into GitHub", class: 'btn', outlet: 'login'
 
@@ -44,7 +44,7 @@ class ReleaseNotesView extends View
 
   # Private
   getGithubToken: ->
-    keytar.getPassword('github.com', 'github')
+    keytar.getPassword('Atom GitHub API Token', 'github')
 
   # Private
   showUnreleased: ->
@@ -57,6 +57,7 @@ class ReleaseNotesView extends View
       url: "https://api.github.com/repos/atom/atom/releases?access_token=#{token}"
       headers:
         'Accept': 'application/vnd.github.manifold-preview'
+        'User-Agent': navigator.userAgent
     , @onReleaseNotesReceived
 
   # Private
@@ -65,11 +66,14 @@ class ReleaseNotesView extends View
 
     data = JSON.parse(body)
     latestRelease = @findLatestRelease(data)
-    atom.config.set('release-notes.viewedVersion', latestRelease.tag_name)
-    roaster latestRelease.body, (error, contents) =>
-      @description.html(contents)
-      @description.prepend("<h1>#{latestRelease.tag_name} - #{latestRelease.name}</h1>")
-      @description.append('<br><p><span class="inline-block highlight-info">To update:</span> close Atom and reopen it.</p>')
+    if latestRelease
+      atom.config.set('release-notes.viewedVersion', latestRelease.tag_name)
+      roaster latestRelease.body, (error, contents) =>
+        @description.html(contents)
+        @description.prepend("<h1 class='section-heading'>#{latestRelease.tag_name} - #{latestRelease.name}</h1>")
+        @description.append('<br><p><span class="inline-block highlight-info">To update:</span> close Atom and reopen it.</p>')
+    else
+      @description.prepend("<p>Error fetching release notes!</p>")
 
   # Private
   findLatestRelease: (data) ->

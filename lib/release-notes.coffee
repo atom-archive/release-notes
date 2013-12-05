@@ -26,11 +26,12 @@ module.exports =
     atom.workspaceView.command 'release-notes:show', ->
       atom.workspaceView.open('atom://release-notes')
 
-    # The timeout is required, so that the status bar can initialize itself
-    # before we attempt to locate the .status-bar-right area.
-    setTimeout ->
-      statusBarRight = atom.workspaceView.find('.status-bar-right')
-      if statusBarRight.length > 0
-        releaseNotesStatusBar = new ReleaseNoteStatusBar({@updateVersion})
-        statusBarRight.append(releaseNotesStatusBar)
-    , 10
+    createStatusEntry = ->
+      view = new ReleaseNoteStatusBar(atom.workspaceView.statusBar)
+      atom.workspaceView.statusBar.appendRight(view)
+
+    if atom.workspaceView.statusBar
+      createStatusEntry()
+    else
+      atom.packages.once 'activated', ->
+        createStatusEntry()
