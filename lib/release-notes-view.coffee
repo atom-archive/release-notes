@@ -1,7 +1,6 @@
 {_, View} = require 'atom'
 
 request = require 'request'
-keytar = require 'keytar'
 roaster = require 'roaster'
 
 module.exports =
@@ -26,7 +25,7 @@ class ReleaseNotesView extends View
     @fetch()
 
   fetch: ->
-    token = @getGithubToken()
+    token = atom.getGitHubAuthToken()
     if token
       @requestLatestReleaseNotes(token)
     else
@@ -41,10 +40,6 @@ class ReleaseNotesView extends View
     @authorization.hide()
     @requestLatestReleaseNotes(token)
     atom.workspaceView.off 'github-sign-in:succeeded', @onSuccessfulSignIn
-
-  # Private
-  getGithubToken: ->
-    keytar.getPassword('Atom GitHub API Token', 'github')
 
   # Private
   showUnreleased: ->
