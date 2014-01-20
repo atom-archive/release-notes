@@ -11,7 +11,7 @@ class ReleaseNotesView extends View
       @section class: 'authorization', style: 'display:none', outlet: 'authorization', =>
         @h1 class: 'section-heading', "Authorization Required"
         @p "You must be logged in to GitHub to access the release notes."
-        @button "Sign into GitHub", class: 'btn', outlet: 'login'
+        @button "Sign in to GitHub", class: 'btn', outlet: 'login'
 
   getTitle: -> 'Release Notes'
 
