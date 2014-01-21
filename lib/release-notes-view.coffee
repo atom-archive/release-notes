@@ -15,13 +15,15 @@ class ReleaseNotesView extends View
 
   getTitle: -> 'Release Notes'
 
-  deserialize: (options={}) ->
+  getUri: -> @uri
+
+  deserialize: ->
     new ReleaseNotesView(options)
 
   serialize: ->
     deserializer: @constructor.name
 
-  initialize: (options={}) ->
+  initialize: ({@uri}={}) ->
     @fetch()
 
   fetch: ->
