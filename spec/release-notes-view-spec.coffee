@@ -14,11 +14,14 @@ describe "ReleaseNotesView", ->
       releaseNotesView.onReleaseNotesReceived(null, {}, data)
 
     atom.workspaceView = new WorkspaceView
-    atom.packages.activatePackage('release-notes', immediate: true)
-    atom.workspaceView.openSync('atom://release-notes')
 
-    releaseNotes = atom.workspaceView.find('.release-notes')
-    releaseNotesView = releaseNotes.view()
+    waitsForPromise ->
+      atom.packages.activatePackage('release-notes')
+
+    runs ->
+      atom.workspaceView.openSync('atom://release-notes')
+      releaseNotes = atom.workspaceView.find('.release-notes')
+      releaseNotesView = releaseNotes.view()
 
   describe "with authorization", ->
     beforeEach ->

@@ -7,9 +7,13 @@ describe "ReleaseNotesStatusBar", ->
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView
-    atom.packages.activatePackage('status-bar', immediate: true)
-    pack = atom.packages.activatePackage('release-notes', immediate: true)
-    pack.mainModule.updateVersion = null
+
+    waitsForPromise ->
+      atom.packages.activatePackage('status-bar')
+
+    waitsForPromise ->
+      atom.packages.activatePackage('release-notes').then (pack) ->
+        pack.mainModule.updateVersion = null
 
   describe "with no viewed version", ->
     beforeEach ->
