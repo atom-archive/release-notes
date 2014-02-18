@@ -9,6 +9,6 @@
   },
   "dependencies": {
     "request": "2.33.0",
-    "roaster": "0.1.0"
+    "roaster": "0.1.x"
   }
 }
