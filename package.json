@@ -4,6 +4,7 @@
   "version": "0.22.0",
   "description": "Notifies users of the latest changes",
   "repository": "https://github.com/atom/release-notes",
+  "license": "MIT",
   "engines": {
     "atom": ">26.0"
   },
