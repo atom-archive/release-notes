@@ -2,7 +2,7 @@
   "name": "release-notes",
   "main": "./lib/release-notes",
   "version": "0.22.0",
-  "description": "Notifies users of the latest changes",
+  "description": "Displays the release notes of Atom in Atom",
   "repository": "https://github.com/atom/release-notes",
   "license": "MIT",
   "engines": {
