@@ -1,4 +1,3 @@
-{_} = require 'atom'
 ReleaseNotesStatusBar = require '../lib/release-notes-status-bar'
 {WorkspaceView} = require 'atom'
 

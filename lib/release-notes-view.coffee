@@ -1,5 +1,5 @@
-{_, View} = require 'atom'
-
+_ = require 'underscore-plus'
+{View} = require 'atom'
 request = require 'request'
 roaster = require 'roaster'
 
