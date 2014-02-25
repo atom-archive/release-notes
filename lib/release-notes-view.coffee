@@ -9,9 +9,11 @@ class ReleaseNotesView extends View
     @div class: 'release-notes padded pane-item', tabindex: -1, =>
       @section class: 'description', outlet: 'description'
 
-  getTitle: -> 'Release Notes'
+  getTitle: ->
+    'Release Notes'
 
-  getUri: -> @uri
+  getUri: ->
+    @uri
 
   deserialize: ({uri, version, releaseNotes})->
     new ReleaseNotesView(uri, version, releaseNotes)
@@ -24,7 +26,6 @@ class ReleaseNotesView extends View
 
   initialize: (@uri, @version, @releaseNotes) ->
     @description.html(releaseNotes)
-    console.log "<h1 class='section-heading'>#{@version}</h1>"
     @description.prepend("<h1 class='section-heading'>#{@version}</h1>")
 
     if @version != atom.getVersion()
