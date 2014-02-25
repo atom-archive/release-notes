@@ -10,6 +10,5 @@ class ReleaseNotesStatusBar extends View
     @subscribe atom.workspaceView, 'window:update-available', => @attach()
     @attach() if previousVersion? and previousVersion != atom.getVersion()
 
-
   attach: ->
     atom.workspaceView.statusBar.appendRight(this)
