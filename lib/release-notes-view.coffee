@@ -64,7 +64,6 @@ class ReleaseNotesView extends View
     data = JSON.parse(body)
     latestRelease = @findLatestRelease(data)
     if latestRelease
-      atom.config.set('release-notes.viewedVersion', latestRelease.tag_name)
       roaster latestRelease.body, (error, contents) =>
         @description.html(contents)
         @description.prepend("<h1 class='section-heading'>#{latestRelease.tag_name} - #{latestRelease.name}</h1>")

@@ -17,6 +17,9 @@ module.exports =
   updateVersion: null
 
   activate: (state) ->
+    previousVersion = atom.config.get('release-notes.viewedVersion')
+    atom.config.set('release-notes.viewedVersion', atom.getVersion())
+
     atom.workspaceView.on 'window:update-available', (event, version) =>
       @updateVersion = version
 
@@ -27,8 +30,7 @@ module.exports =
       atom.workspaceView.open('atom://release-notes')
 
     createStatusEntry = ->
-      view = new ReleaseNoteStatusBar(atom.workspaceView.statusBar)
-      atom.workspaceView.statusBar.appendRight(view)
+      new ReleaseNoteStatusBar(previousVersion)
 
     if atom.workspaceView.statusBar
       createStatusEntry()
