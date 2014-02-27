@@ -1,7 +1,6 @@
 _ = require 'underscore-plus'
 {View} = require 'atom'
 request = require 'request'
-roaster = require 'roaster'
 
 module.exports =
 class ReleaseNotesView extends View

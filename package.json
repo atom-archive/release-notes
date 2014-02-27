@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "request": "2.33.0",
-    "roaster": "1.x",
     "underscore-plus": "1.x"
   }
 }
