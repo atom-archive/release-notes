@@ -9,6 +9,5 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-    "underscore-plus": "1.x"
   }
 }
