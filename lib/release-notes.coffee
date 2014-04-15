@@ -22,7 +22,7 @@ module.exports =
       localStorage["release-notes:version"] = version
       localStorage["release-notes:releaseNotes"] = releaseNotes
 
-    atom.project.registerOpener (filePath) ->
+    atom.workspace.registerOpener (filePath) ->
       return unless filePath is releaseNotesUri
 
       version = localStorage["release-notes:version"]
