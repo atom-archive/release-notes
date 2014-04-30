@@ -1,4 +1,4 @@
-## Release Notes package
+## Release Notes package [![Build Status](https://travis-ci.org/atom/release-notes.svg?branch=master)](https://travis-ci.org/atom/release-notes)
 
 Lets people know what's new in Atom (in Atom!)
 
