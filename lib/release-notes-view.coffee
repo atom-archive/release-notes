@@ -9,6 +9,9 @@ class ReleaseNotesView extends View
   getTitle: ->
     'Release Notes'
 
+  getIconName: ->
+    "squirrel"
+
   getUri: ->
     @uri
 
