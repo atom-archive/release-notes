@@ -3,7 +3,7 @@
 module.exports =
 class ReleaseNotesView extends View
   @content: ->
-    @div class: 'release-notes padded pane-item', tabindex: -1, =>
+    @div class: 'release-notes padded pane-item native-key-bindings', tabindex: -1, =>
       @section class: 'description', outlet: 'description'
 
   getTitle: ->
