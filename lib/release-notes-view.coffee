@@ -14,7 +14,7 @@ class ReleaseNotesView extends View
     'Release Notes'
 
   getIconName: ->
-    "squirrel"
+    'squirrel'
 
   getUri: ->
     @uri
