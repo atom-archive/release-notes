@@ -9,8 +9,8 @@ createReleaseNotesView = (uri, version, releaseNotes) ->
 
 deserializer =
   name: 'ReleaseNotesView'
-  deserialize: ({uri, version, releaseNotes}) ->
-    createReleaseNotesView(uri, version, releaseNotes)
+  deserialize: ({uri, releaseVersion, releaseNotes}) ->
+    createReleaseNotesView(uri, releaseVersion, releaseNotes)
 atom.deserializers.add(deserializer)
 
 module.exports =
