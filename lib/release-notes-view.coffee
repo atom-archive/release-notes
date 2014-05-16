@@ -32,7 +32,7 @@ class ReleaseNotesView extends View
     @subscribe @viewReleaseNotesButton, 'click', ->
       window.open('https://atom.io/releases', '_blank', '')
 
-    if @releaseVersion == atom.getVersion()
+    if @releaseVersion != atom.getVersion()
       @updateButton.show()
       @subscribe @updateButton, 'click', ->
         atom.workspaceView.trigger('application:install-update')
