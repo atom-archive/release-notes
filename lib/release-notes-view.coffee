@@ -25,7 +25,7 @@ class ReleaseNotesView extends View
     version: @version
 
   initialize: (@uri, @version, @releaseNotes) ->
-    @description.html(releaseNotes)
+    @description.html(@releaseNotes)
     @description.prepend("<h1 class='section-heading'>#{@version}</h1>")
 
     if @version != atom.getVersion()
