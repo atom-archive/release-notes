@@ -8,6 +8,7 @@ describe "ReleaseNotesView", ->
   [releaseNotes, releaseNotesView] = []
 
   beforeEach ->
+    spyOn(atom, 'isReleasedVersion').andReturn(true)
     atom.workspaceView = new WorkspaceView
 
     waitsForPromise ->
@@ -22,5 +23,5 @@ describe "ReleaseNotesView", ->
       runs ->
         releaseNotes = atom.workspaceView.find('.release-notes')
         releaseNotesView = releaseNotes.view()
-        expect(releaseNotes.find('.description h1').text()).toBe 'v30.0.0'
+        expect(releaseNotes.find('h1').text()).toBe 'v30.0.0'
         expect(releaseNotes.find('.description').text()).toContain "NOTES"

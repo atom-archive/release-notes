@@ -8,6 +8,8 @@ describe "ReleaseNotesStatusBar", ->
   [releaseNotesStatus, releaseNotesStatusBar]  = []
 
   beforeEach ->
+    spyOn(atom, 'isReleasedVersion').andReturn(true)
+
     atom.workspaceView = new WorkspaceView
 
     waitsForPromise ->
