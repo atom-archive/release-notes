@@ -17,6 +17,7 @@ module.exports =
   activate: ->
     previousVersion = atom.config.get('release-notes.viewedVersion')
     atom.config.set('release-notes.viewedVersion', atom.getVersion())
+    return unless atom.isReleasedVersion()
 
     atom.workspaceView.on 'window:update-available', (event, version, releaseNotes) =>
       localStorage["release-notes:version"] = version
