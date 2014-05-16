@@ -4,29 +4,36 @@ module.exports =
 class ReleaseNotesView extends View
   @content: ->
     @div class: 'release-notes padded pane-item native-key-bindings', tabindex: -1, =>
-      @section class: 'description', outlet: 'description'
+      @h1 class: 'section-heading', outlet: 'version'
+      @div class: 'description', outlet: 'description'
+      @div class: 'block', =>
+        @button class: 'inline-block update-instructions btn btn-success', outlet: 'updateButton', 'Restart and update'
+        @button class: 'inline-block btn', outlet: 'viewReleaseNotesButton', 'View past release notes'
 
   getTitle: ->
     'Release Notes'
 
   getIconName: ->
-    "squirrel"
+    'squirrel'
 
   getUri: ->
     @uri
-
-  deserialize: ({uri, version, releaseNotes})->
-    new ReleaseNotesView(uri, version, releaseNotes)
 
   serialize: ->
     deserializer: @constructor.name
     uri: @uri
     releaseNotes: @releaseNotes
-    version: @version
+    releaseVersion: @releaseVersion
 
-  initialize: (@uri, @version, @releaseNotes) ->
-    @description.html(releaseNotes)
-    @description.prepend("<h1 class='section-heading'>#{@version}</h1>")
+  initialize: (@uri, @releaseVersion, @releaseNotes) ->
+    if @releaseNotes? and @releaseVersion?
+      @description.html(@releaseNotes)
+      @version.text(@releaseVersion)
 
-    if @version != atom.getVersion()
-      @description.append('<br><p><span class="inline-block highlight-info">To update:</span> close Atom and reopen it.</p>')
+      if @releaseVersion != atom.getVersion()
+        @updateButton.show()
+        @subscribe @updateButton, 'click', ->
+          atom.workspaceView.trigger('application:install-update')
+
+    @subscribe @viewReleaseNotesButton, 'click', ->
+      window.open('https://atom.io/releases', '_blank', '')

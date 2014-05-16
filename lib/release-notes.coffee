@@ -9,31 +9,32 @@ createReleaseNotesView = (uri, version, releaseNotes) ->
 
 deserializer =
   name: 'ReleaseNotesView'
-  deserialize: ({uri, version, releaseNotes}) ->
-    createReleaseNotesView(uri, version, releaseNotes)
+  deserialize: ({uri, releaseVersion, releaseNotes}) ->
+    createReleaseNotesView(uri, releaseVersion, releaseNotes)
 atom.deserializers.add(deserializer)
 
 module.exports =
   activate: ->
-    previousVersion = atom.config.get('release-notes.viewedVersion')
-    atom.config.set('release-notes.viewedVersion', atom.getVersion())
+    return unless atom.isReleasedVersion()
 
-    atom.workspaceView.on 'window:update-available', (event, version, releaseNotes) =>
-      localStorage["release-notes:version"] = version
-      localStorage["release-notes:releaseNotes"] = releaseNotes
+    previousVersion = localStorage.getItem('release-notes:previousVersion')
+    localStorage.setItem('release-notes:previousVersion', atom.getVersion())
+
+    atom.workspaceView.on 'window:update-available', (event, version, releaseNotes) ->
+      localStorage.setItem("release-notes:version", version)
+      localStorage.setItem("release-notes:releaseNotes", releaseNotes)
 
     atom.workspace.registerOpener (filePath) ->
       return unless filePath is releaseNotesUri
 
-      version = localStorage["release-notes:version"]
-      releaseNotes = localStorage["release-notes:releaseNotes"]
+      version = localStorage.getItem("release-notes:version")
+      releaseNotes = localStorage.getItem("release-notes:releaseNotes")
       createReleaseNotesView(filePath, version, releaseNotes)
 
     atom.workspaceView.command 'release-notes:show', ->
       atom.workspaceView.open('atom://release-notes')
 
-    createStatusEntry = ->
-      new ReleaseNoteStatusBar(previousVersion)
+    createStatusEntry = -> new ReleaseNoteStatusBar(previousVersion)
 
     if atom.workspaceView.statusBar
       createStatusEntry()
