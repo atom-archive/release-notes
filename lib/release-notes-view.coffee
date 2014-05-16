@@ -4,7 +4,11 @@ module.exports =
 class ReleaseNotesView extends View
   @content: ->
     @div class: 'release-notes padded pane-item native-key-bindings', tabindex: -1, =>
-      @section class: 'description', outlet: 'description'
+      @h1 class: 'section-heading', outlet: 'version'
+      @div class: 'description', outlet: 'description'
+      @div class: 'update-instructions', outlet: 'updateInstructions', =>
+        @span class: 'inline-block highlight-info', "To update"
+        @span 'close and then reopen Atom.'
 
   getTitle: ->
     'Release Notes'
@@ -15,18 +19,16 @@ class ReleaseNotesView extends View
   getUri: ->
     @uri
 
-  deserialize: ({uri, version, releaseNotes})->
-    new ReleaseNotesView(uri, version, releaseNotes)
+  deserialize: ({uri, releaseVersion, releaseNotes})->
+    new ReleaseNotesView(uri, releaseVersion, releaseNotes)
 
   serialize: ->
     deserializer: @constructor.name
     uri: @uri
     releaseNotes: @releaseNotes
-    version: @version
+    releaseVersion: @releaseVersion
 
-  initialize: (@uri, @version, @releaseNotes) ->
+  initialize: (@uri, @releaseVersion, @releaseNotes) ->
     @description.html(@releaseNotes)
-    @description.prepend("<h1 class='section-heading'>#{@version}</h1>")
-
-    if @version != atom.getVersion()
-      @description.append('<br><p><span class="inline-block highlight-info">To update:</span> close Atom and reopen it.</p>')
+    @version.text(@releaseVersion)
+    @updateInstructions.show() if @releaseVersion != atom.getVersion()
