@@ -26,13 +26,14 @@ class ReleaseNotesView extends View
     releaseVersion: @releaseVersion
 
   initialize: (@uri, @releaseVersion, @releaseNotes) ->
-    @description.html(@releaseNotes)
-    @version.text(@releaseVersion)
+    if @releaseNotes? and @releaseVersion?
+      @description.html(@releaseNotes)
+      @version.text(@releaseVersion)
+
+      if @releaseVersion != atom.getVersion()
+        @updateButton.show()
+        @subscribe @updateButton, 'click', ->
+          atom.workspaceView.trigger('application:install-update')
 
     @subscribe @viewReleaseNotesButton, 'click', ->
       window.open('https://atom.io/releases', '_blank', '')
-
-    if @releaseVersion != atom.getVersion()
-      @updateButton.show()
-      @subscribe @updateButton, 'click', ->
-        atom.workspaceView.trigger('application:install-update')
