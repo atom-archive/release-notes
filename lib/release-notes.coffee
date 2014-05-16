@@ -16,7 +16,7 @@ atom.deserializers.add(deserializer)
 module.exports =
   activate: ->
     return unless atom.isReleasedVersion()
-    
+
     previousVersion = localStorage.getItem('release-notes:previousVersion')
     localStorage.setItem('release-notes:previousVersion', atom.getVersion())
 
