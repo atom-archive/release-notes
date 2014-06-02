@@ -1,3 +1,4 @@
+shell = require 'shell'
 ReleaseNotesView = null
 ReleaseNoteStatusBar = require  './release-notes-status-bar'
 
@@ -15,29 +16,31 @@ atom.deserializers.add(deserializer)
 
 module.exports =
   activate: ->
-    return unless atom.isReleasedVersion()
+    if atom.isReleasedVersion()
+      previousVersion = localStorage.getItem('release-notes:previousVersion')
+      localStorage.setItem('release-notes:previousVersion', atom.getVersion())
 
-    previousVersion = localStorage.getItem('release-notes:previousVersion')
-    localStorage.setItem('release-notes:previousVersion', atom.getVersion())
+      atom.workspaceView.on 'window:update-available', (event, version, releaseNotes) ->
+        localStorage.setItem("release-notes:version", version)
+        localStorage.setItem("release-notes:releaseNotes", releaseNotes)
 
-    atom.workspaceView.on 'window:update-available', (event, version, releaseNotes) ->
-      localStorage.setItem("release-notes:version", version)
-      localStorage.setItem("release-notes:releaseNotes", releaseNotes)
+      atom.workspace.registerOpener (filePath) ->
+        return unless filePath is releaseNotesUri
 
-    atom.workspace.registerOpener (filePath) ->
-      return unless filePath is releaseNotesUri
+        version = localStorage.getItem("release-notes:version")
+        releaseNotes = localStorage.getItem("release-notes:releaseNotes")
+        createReleaseNotesView(filePath, version, releaseNotes)
 
-      version = localStorage.getItem("release-notes:version")
-      releaseNotes = localStorage.getItem("release-notes:releaseNotes")
-      createReleaseNotesView(filePath, version, releaseNotes)
+      createStatusEntry = -> new ReleaseNoteStatusBar(previousVersion)
+
+      if atom.workspaceView.statusBar
+        createStatusEntry()
+      else
+        atom.packages.once 'activated', ->
+          createStatusEntry()
 
     atom.workspaceView.command 'release-notes:show', ->
-      atom.workspaceView.open('atom://release-notes')
-
-    createStatusEntry = -> new ReleaseNoteStatusBar(previousVersion)
-
-    if atom.workspaceView.statusBar
-      createStatusEntry()
-    else
-      atom.packages.once 'activated', ->
-        createStatusEntry()
+      if atom.isReleasedVersion()
+        atom.workspaceView.open(releaseNotesUri)
+      else
+        shell.openExternal('https://atom.io/releases')

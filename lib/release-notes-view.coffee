@@ -1,3 +1,4 @@
+shell = require 'shell'
 {View} = require 'atom'
 
 module.exports =
@@ -36,4 +37,4 @@ class ReleaseNotesView extends View
           atom.workspaceView.trigger('application:install-update')
 
     @subscribe @viewReleaseNotesButton, 'click', ->
-      window.open('https://atom.io/releases', '_blank', '')
+      shell.openExternal('https://atom.io/releases')
