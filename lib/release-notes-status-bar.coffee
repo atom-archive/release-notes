@@ -3,9 +3,13 @@
 module.exports =
 class ReleaseNotesStatusBar extends View
   @content: ->
-    @span type: 'button', class: 'release-notes-status icon icon-squirrel inline-block'
+    @span type: 'button', class: 'release-notes-status icon icon-squirrel inline-block', =>
+      @span class: 'text-highlight', outlet: 'upgradeText', " Upgrade"
 
   initialize: (previousVersion) ->
+    unless process.platform is 'win32'
+      @upgradeText.hide()
+
     @subscribe this, 'click', -> atom.workspaceView.open('atom://release-notes')
     @subscribe atom.workspaceView, 'window:update-available', => @attach()
     @setTooltip('Click here to view the release notes')
