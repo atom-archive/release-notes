@@ -27,6 +27,7 @@ class ReleaseNotesView extends View
     releaseVersion: @releaseVersion
 
   initialize: (@uri, @releaseVersion, @releaseNotes) ->
+    @updateButton.hide()
     if @releaseNotes? and @releaseVersion?
       @description.html(@releaseNotes)
       @version.text(@releaseVersion)
