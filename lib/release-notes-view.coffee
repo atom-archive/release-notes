@@ -7,6 +7,10 @@ class ReleaseNotesView extends View
     @div class: 'release-notes padded pane-item native-key-bindings', tabindex: -1, =>
       @h1 class: 'section-heading', outlet: 'version'
       @div class: 'description', outlet: 'description'
+
+      @div class: 'block', =>
+        @h2 class: 'inline-block', outlet: 'chocolateyText', 'Use `cup Atom` to update Atom via Chocolatey.'
+
       @div class: 'block', =>
         @button class: 'inline-block update-instructions btn btn-success', outlet: 'updateButton', 'Restart and update'
         @button class: 'inline-block download-instructions btn btn-success', outlet: 'downloadButton', 'Download new version'
@@ -27,9 +31,13 @@ class ReleaseNotesView extends View
     releaseNotes: @releaseNotes
     releaseVersion: @releaseVersion
 
+  isChocolateyBuild: ->
+    /chocolatey/i.test atom.getLoadSettings().resourcePath
+
   initialize: (@uri, @releaseVersion, @releaseNotes) ->
     @updateButton.hide()
     @downloadButton.hide()
+    @chocolateyText.hide()
 
     if @releaseNotes? and @releaseVersion?
       @description.html(@releaseNotes)
@@ -37,7 +45,10 @@ class ReleaseNotesView extends View
 
       if @releaseVersion != atom.getVersion()
         if process.platform is 'win32'
-          @downloadButton.show()
+          if @isChocolateyBuild()
+            @chocolateyText.show()
+          else
+            @downloadButton.show()
         else
           @updateButton.show()
 
