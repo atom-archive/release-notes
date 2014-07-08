@@ -4,7 +4,7 @@ module.exports =
 class ReleaseNotesStatusBar extends View
   @content: ->
     @span type: 'button', class: 'release-notes-status icon icon-squirrel inline-block', =>
-      @span class: 'text-highlight', outlet: 'upgradeText', " Upgrade"
+      @a href: '#', class: 'text-info', outlet: 'upgradeText', " Upgrade"
 
   initialize: (previousVersion) ->
     unless process.platform is 'win32'
