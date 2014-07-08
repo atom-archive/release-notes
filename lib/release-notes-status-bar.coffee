@@ -15,6 +15,5 @@ class ReleaseNotesStatusBar extends View
     @setTooltip('Click here to view the release notes')
     @attach() if previousVersion? and previousVersion != atom.getVersion()
 
-
   attach: ->
     atom.workspaceView.statusBar.appendRight(this)
