@@ -9,7 +9,10 @@ class ReleaseNotesView extends View
       @div class: 'description', outlet: 'description'
 
       @div class: 'block', =>
-        @h2 class: 'inline-block', outlet: 'chocolateyText', 'Use `cup Atom` to update Atom via Chocolatey.'
+        @h2 class: 'inline-block', outlet: 'chocolateyText', =>
+          @span 'Run '
+          @code 'cup Atom'
+          @span ' to install the latest Atom release.'
 
       @div class: 'block', =>
         @button class: 'inline-block update-instructions btn btn-success', outlet: 'updateButton', 'Restart and update'
