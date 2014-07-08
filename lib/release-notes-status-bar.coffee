@@ -7,11 +7,12 @@ class ReleaseNotesStatusBar extends View
       @a href: '#', class: 'text-info', outlet: 'upgradeText', " Upgrade"
 
   initialize: (previousVersion) ->
-    unless process.platform is 'win32'
-      @upgradeText.hide()
+    @upgradeText.hide()
 
     @subscribe this, 'click', -> atom.workspaceView.open('atom://release-notes')
-    @subscribe atom.workspaceView, 'window:update-available', => @attach()
+    @subscribe atom.workspaceView, 'window:update-available', =>
+      @upgradeText.show() if process.platform is 'win32'
+      @attach()
     @setTooltip('Click here to view the release notes')
     @attach() if previousVersion? and previousVersion != atom.getVersion()
 
