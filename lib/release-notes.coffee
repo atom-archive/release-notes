@@ -33,11 +33,11 @@ module.exports =
 
       createStatusEntry = -> new ReleaseNoteStatusBar(previousVersion)
 
-      if atom.workspaceView.statusBar
+      if atom.workspaceView.statusBar?
         createStatusEntry()
       else
         atom.packages.once 'activated', ->
-          createStatusEntry()
+          createStatusEntry() if atom.workspaceView.statusBar?
 
     atom.workspaceView.command 'release-notes:show', ->
       if atom.isReleasedVersion()
