@@ -8,11 +8,10 @@ createReleaseNotesView = (uri, version, releaseNotes) ->
   ReleaseNotesView ?= require './release-notes-view'
   new ReleaseNotesView(uri, version, releaseNotes)
 
-deserializer =
+atom.deserializers.add
   name: 'ReleaseNotesView'
   deserialize: ({uri, releaseVersion, releaseNotes}) ->
     createReleaseNotesView(uri, releaseVersion, releaseNotes)
-atom.deserializers.add(deserializer)
 
 module.exports =
   activate: ->
