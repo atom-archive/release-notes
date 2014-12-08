@@ -1,4 +1,3 @@
-shell = require 'shell'
 ReleaseNotesView = null
 ReleaseNoteStatusBar = require  './release-notes-status-bar'
 
@@ -43,4 +42,4 @@ module.exports =
       if atom.isReleasedVersion()
         atom.workspace.open(releaseNotesUri)
       else
-        shell.openExternal('https://atom.io/releases')
+        require('shell').openExternal('https://atom.io/releases')
