@@ -4,8 +4,6 @@ triggerUpdate = ->
   atom.commands.dispatch(atom.views.getView(atom.workspace), 'window:update-available', ['v22.0.0', "NOTES"])
 
 describe "ReleaseNotesStatusBar", ->
-  [releaseNotesStatus, releaseNotesStatusBar]  = []
-
   beforeEach ->
     spyOn(atom, 'isReleasedVersion').andReturn(true)
 
@@ -30,8 +28,6 @@ describe "ReleaseNotesStatusBar", ->
       expect(atom.views.getView(atom.workspace)).toContain('.release-notes-status')
 
     describe "clicking on the status", ->
-      [workspaceOpen] = []
-
       it "opens the release notes view", ->
         workspaceOpen = spyOn(atom.workspace, 'open')
         triggerUpdate()

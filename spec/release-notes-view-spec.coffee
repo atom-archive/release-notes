@@ -1,8 +1,6 @@
 {$} = require 'space-pen'
 
 describe "ReleaseNotesView", ->
-  [releaseNotes, releaseNotesView] = []
-
   beforeEach ->
     spyOn(atom, 'isReleasedVersion').andReturn(true)
 
