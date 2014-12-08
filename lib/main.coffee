@@ -37,7 +37,7 @@ module.exports =
       if document.querySelector('status-bar')
         createStatusEntry()
       else
-        atom.packages.once 'activated', ->
+        atom.packages.onDidActivateAll ->
           createStatusEntry() if document.querySelector('status-bar')
 
     atom.commands.add 'atom-workspace', 'release-notes:show', ->
