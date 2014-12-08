@@ -46,7 +46,7 @@ class ReleaseNotesView extends View
       @description.html(@releaseNotes)
       @version.text(@releaseVersion)
 
-      if @releaseVersion != atom.getVersion()
+      if @releaseVersion isnt atom.getVersion()
         if process.platform is 'win32'
           if @isChocolateyBuild()
             @chocolateyText.show()
