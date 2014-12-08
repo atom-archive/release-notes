@@ -25,7 +25,7 @@ module.exports =
         localStorage.setItem("release-notes:version", version)
         localStorage.setItem("release-notes:releaseNotes", releaseNotes)
 
-      atom.workspace.registerOpener (filePath) ->
+      atom.workspace.addOpener (filePath) ->
         return unless filePath is releaseNotesUri
 
         version = localStorage.getItem("release-notes:version")
