@@ -1,4 +1,5 @@
-{CompositeDisposable, View} = require 'atom'
+{View} = require 'space-pen'
+{CompositeDisposable} = require 'atom'
 
 module.exports =
 class ReleaseNotesStatusBar extends View
@@ -10,7 +11,7 @@ class ReleaseNotesStatusBar extends View
     @subscriptions = new CompositeDisposable()
     @upgradeText.hide()
 
-    @subscribe this, 'click', -> atom.workspace.open('atom://release-notes')
+    @on 'click', -> atom.workspace.open('atom://release-notes')
     @subscriptions.add atom.commands.add 'atom-workspace', 'window:update-available', =>
       @upgradeText.show() if process.platform is 'win32'
       @attach()

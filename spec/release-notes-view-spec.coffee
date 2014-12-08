@@ -1,8 +1,7 @@
 fs = require 'fs'
 path = require 'path'
-
+{$} = require 'space-pen'
 ReleaseNotesView = require '../lib/release-notes-view'
-{$} = require 'atom'
 
 describe "ReleaseNotesView", ->
   [releaseNotes, releaseNotesView] = []
