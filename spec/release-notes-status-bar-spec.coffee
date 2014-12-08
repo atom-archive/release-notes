@@ -1,5 +1,4 @@
 {$} = require 'space-pen'
-ReleaseNotesStatusBar = require '../lib/release-notes-status-bar'
 
 triggerUpdate = ->
   atom.commands.dispatch(atom.views.getView(atom.workspace), 'window:update-available', ['v22.0.0', "NOTES"])
