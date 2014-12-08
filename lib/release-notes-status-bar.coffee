@@ -15,7 +15,8 @@ class ReleaseNotesStatusBar extends View
     @subscriptions.add atom.commands.add 'atom-workspace', 'window:update-available', =>
       @upgradeText.show() if process.platform is 'win32'
       @attach()
-    @setTooltip('Click here to view the release notes')
+
+    @subscriptions.add atom.tooltips.add(@element, title: 'Click here to view the release notes')
     @attach() if previousVersion? and previousVersion isnt atom.getVersion()
 
   attach: ->
