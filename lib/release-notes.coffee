@@ -20,7 +20,8 @@ module.exports =
       previousVersion = localStorage.getItem('release-notes:previousVersion')
       localStorage.setItem('release-notes:previousVersion', atom.getVersion())
 
-      atom.workspaceView.on 'window:update-available', (event, version, releaseNotes) ->
+      atom.commands.add 'atom-workspace', 'window:update-available', (event) ->
+        [version, releaseNotes] = event.detail
         localStorage.setItem("release-notes:version", version)
         localStorage.setItem("release-notes:releaseNotes", releaseNotes)
 
@@ -33,14 +34,14 @@ module.exports =
 
       createStatusEntry = -> new ReleaseNoteStatusBar(previousVersion)
 
-      if atom.workspaceView.statusBar?
+      if document.querySelector('status-bar')
         createStatusEntry()
       else
         atom.packages.once 'activated', ->
-          createStatusEntry() if atom.workspaceView.statusBar?
+          createStatusEntry() if document.querySelector('status-bar')
 
-    atom.workspaceView.command 'release-notes:show', ->
+    atom.commands.add 'atom-workspace', 'release-notes:show', ->
       if atom.isReleasedVersion()
-        atom.workspaceView.open(releaseNotesUri)
+        atom.workspace.open(releaseNotesUri)
       else
         shell.openExternal('https://atom.io/releases')
