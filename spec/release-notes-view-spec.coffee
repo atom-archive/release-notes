@@ -8,17 +8,19 @@ describe "ReleaseNotesView", ->
       atom.packages.activatePackage('release-notes')
 
     runs ->
-      atom.commands.dispatch(atom.views.getView(atom.workspace), 'window:update-available', ['v30.0.0', 'NOTES'])
+      spyOn($, 'ajax').andCallFake ({success}) ->
+        success([{tag_name: 'v0.3.0', body: 'a release'}])
+      atom.commands.dispatch(atom.views.getView(atom.workspace), 'window:update-available', ['0.3.0'])
 
   describe "when in release mode", ->
-    it "renders the latest release's notes", ->
+    it "renders the release notes for the current and previous releases", ->
       waitsForPromise ->
         atom.workspace.open('atom://release-notes')
 
       runs ->
         releaseNotes = $(atom.views.getView(atom.workspace)).find('.release-notes')
-        expect(releaseNotes.find('h1').text()).toBe 'v30.0.0'
-        expect(releaseNotes.find('.description').text()).toContain "NOTES"
+        expect(releaseNotes.find('h1').text()).toBe '0.3.0'
+        expect(releaseNotes.find('.description').text()).toContain "a release"
 
     describe "when window:update-available is triggered without release details", ->
       it "ignores the event", ->
@@ -29,4 +31,4 @@ describe "ReleaseNotesView", ->
 
         runs ->
           releaseNotes = $(atom.views.getView(atom.workspace)).find('.release-notes')
-          expect(releaseNotes.find('h1').text()).toBe 'v30.0.0'
+          expect(releaseNotes.find('h1').text()).toBe '0.3.0'
