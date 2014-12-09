@@ -23,15 +23,15 @@ module.exports =
         return unless  Array.isArray(event?.detail)
 
         [version] = event.detail
-        localStorage.setItem("release-notes:version", version)
+        localStorage.setItem('release-notes:version', version)
         downloadReleaseNotes(version)
 
       atom.workspace.addOpener (filePath) ->
         return unless filePath is releaseNotesUri
 
-        version = localStorage.getItem("release-notes:version")
+        version = localStorage.getItem('release-notes:version')
         try
-          releaseNotes = JSON.parse(localStorage.getItem("release-notes:releaseNotes")) ? []
+          releaseNotes = JSON.parse(localStorage.getItem('release-notes:releaseNotes')) ? []
         catch error
           releaseNotes = []
         createReleaseNotesView(filePath, version, releaseNotes)
