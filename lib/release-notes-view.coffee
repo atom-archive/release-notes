@@ -1,4 +1,3 @@
-shell = require 'shell'
 {$$, View} = require 'space-pen'
 {Disposable} = require 'atom'
 
