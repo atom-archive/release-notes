@@ -57,7 +57,8 @@ downloadReleaseNotes = (version) ->
     error: ->
       placeholderNotes = {version, notes: 'The release notes failed to download.'}
       localStorage.setItem('release-notes:releaseNotes', JSON.stringify(placeholderNotes))
-    success: (releases=[]) ->
+    success: (releases) ->
+      releases = [] unless Array.isArray(releases)
       releases.shift() while releases[0]? and releases[0].tag_name isnt "v#{version}"
       releaseNotes = releases.map ({tag_name, body}) -> {version: tag_name, notes: body}
       convertMarkdown releaseNotes, ->
