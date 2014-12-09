@@ -1,3 +1,4 @@
+{$} = require 'space-pen'
 ReleaseNotesView = null
 ReleaseNoteStatusBar = require  './release-notes-status-bar'
 
@@ -21,15 +22,18 @@ module.exports =
       atom.commands.add 'atom-workspace', 'window:update-available', (event) ->
         return unless  Array.isArray(event?.detail)
 
-        [version, releaseNotes] = event.detail
+        [version] = event.detail
         localStorage.setItem("release-notes:version", version)
-        localStorage.setItem("release-notes:releaseNotes", releaseNotes)
+        downloadReleaseNotes(version)
 
       atom.workspace.addOpener (filePath) ->
         return unless filePath is releaseNotesUri
 
         version = localStorage.getItem("release-notes:version")
-        releaseNotes = localStorage.getItem("release-notes:releaseNotes")
+        try
+          releaseNotes = JSON.parse(localStorage.getItem("release-notes:releaseNotes")) ? []
+        catch error
+          releaseNotes = []
         createReleaseNotesView(filePath, version, releaseNotes)
 
       createStatusEntry = -> new ReleaseNoteStatusBar(previousVersion)
@@ -45,3 +49,31 @@ module.exports =
         atom.workspace.open(releaseNotesUri)
       else
         require('shell').openExternal('https://atom.io/releases')
+
+    downloadReleaseNotes(atom.getVersion())
+
+downloadReleaseNotes = (version) ->
+  $.ajax
+    url: 'https://api.github.com/repos/atom/atom/releases'
+    dataType: 'json'
+    success: (releases=[]) ->
+      releases.shift() while releases[0]? and releases[0].tag_name isnt "v#{version}"
+      releaseNotes = releases.map ({tag_name, body}) -> {version: tag_name, notes: body}
+      convertMarkdown releaseNotes, ->
+        localStorage.setItem("release-notes:releaseNotes", JSON.stringify(releaseNotes))
+
+convertMarkdown = (releases, callback) ->
+  releases = releases.slice()
+
+  roaster = require 'roaster'
+  options =
+    sanitize: false
+    breaks: true
+
+  convert = (release) ->
+    return callback() unless release?
+    roaster release.notes, options, (error, html) =>
+      release.notes = html unless error?
+      convert(releases.pop())
+
+  convert(releases.pop())

@@ -1,13 +1,17 @@
 shell = require 'shell'
-{View} = require 'space-pen'
+{$$, View} = require 'space-pen'
 {Disposable} = require 'atom'
 
 module.exports =
 class ReleaseNotesView extends View
   @content: ->
     @div class: 'release-notes padded pane-item native-key-bindings', tabindex: -1, =>
-      @h1 class: 'section-heading', outlet: 'version'
-      @div class: 'description', outlet: 'description'
+      @div class: 'block', =>
+        @div outlet: 'notesContainer'
+        @h2 class: 'inline-block', outlet: 'chocolateyText', =>
+          @span 'Run '
+          @code 'cup Atom'
+          @span ' to install the latest Atom release.'
 
       @div class: 'block', =>
         @button class: 'inline-block update-instructions btn btn-success', outlet: 'updateButton', 'Restart and update'
@@ -36,9 +40,17 @@ class ReleaseNotesView extends View
     @updateButton.hide()
 
     if @releaseNotes? and @releaseVersion?
-      @description.html(@releaseNotes)
-      @version.text(@releaseVersion)
       @updateButton.show() if @releaseVersion isnt atom.getVersion()
+
+      # Support old format
+      if typeof @releaseNotes is 'string'
+        @releaseNotes = [{version: @releaseVersion, notes: @releaseNotes}]
+
+      for {version, notes} in @releaseNotes
+        @notesContainer.append $$ ->
+          @h1 class: 'section-heading', version
+          @div class: 'description', =>
+            @raw notes
 
     @updateButton.on 'click', ->
       atom.commands.dispatch(atom.views.getView(atom.workspace), 'application:install-update')
