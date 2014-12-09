@@ -50,8 +50,6 @@ module.exports =
       else
         require('shell').openExternal('https://atom.io/releases')
 
-    downloadReleaseNotes(atom.getVersion())
-
 downloadReleaseNotes = (version) ->
   $.ajax
     url: 'https://api.github.com/repos/atom/atom/releases'
