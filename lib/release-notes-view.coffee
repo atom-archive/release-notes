@@ -8,7 +8,6 @@ class ReleaseNotesView extends View
     @div class: 'release-notes padded pane-item native-key-bindings', tabindex: -1, =>
       @div class: 'block', =>
         @button class: 'inline-block update-instructions btn btn-success', outlet: 'updateButton', 'Restart and update'
-        @button class: 'inline-block btn', outlet: 'viewReleaseNotesButton', 'View past release notes'
 
       @h2 class: 'inline-block', outlet: 'chocolateyText', =>
         @span 'Run '
@@ -55,6 +54,3 @@ class ReleaseNotesView extends View
 
     @updateButton.on 'click', ->
       atom.commands.dispatch(atom.views.getView(atom.workspace), 'application:install-update')
-
-    @viewReleaseNotesButton.on 'click', ->
-      shell.openExternal('https://atom.io/releases')
