@@ -1,4 +1,5 @@
-{View} = require 'atom'
+{View} = require 'space-pen'
+{CompositeDisposable} = require 'atom'
 
 module.exports =
 class ReleaseNotesStatusBar extends View
@@ -7,14 +8,19 @@ class ReleaseNotesStatusBar extends View
       @a href: '#', class: 'text-info', outlet: 'upgradeText', " Upgrade"
 
   initialize: (previousVersion) ->
+    @subscriptions = new CompositeDisposable()
     @upgradeText.hide()
 
-    @subscribe this, 'click', -> atom.workspaceView.open('atom://release-notes')
-    @subscribe atom.workspaceView, 'window:update-available', =>
+    @on 'click', -> atom.workspace.open('atom://release-notes')
+    @subscriptions.add atom.commands.add 'atom-workspace', 'window:update-available', =>
       @upgradeText.show() if process.platform is 'win32'
       @attach()
-    @setTooltip('Click here to view the release notes')
-    @attach() if previousVersion? and previousVersion != atom.getVersion()
+
+    @subscriptions.add atom.tooltips.add(@element, title: 'Click here to view the release notes')
+    @attach() if previousVersion? and previousVersion isnt atom.getVersion()
 
   attach: ->
-    atom.workspaceView.statusBar.appendRight(this)
+    document.querySelector('status-bar').appendRight(this)
+
+  beforeRemove: ->
+    @subsriptions.dispose()

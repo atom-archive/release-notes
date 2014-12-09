@@ -1,5 +1,5 @@
 shell = require 'shell'
-{View} = require 'atom'
+{View} = require 'space-pen'
 
 module.exports =
 class ReleaseNotesView extends View
@@ -46,7 +46,7 @@ class ReleaseNotesView extends View
       @description.html(@releaseNotes)
       @version.text(@releaseVersion)
 
-      if @releaseVersion != atom.getVersion()
+      if @releaseVersion isnt atom.getVersion()
         if process.platform is 'win32'
           if @isChocolateyBuild()
             @chocolateyText.show()
@@ -55,11 +55,11 @@ class ReleaseNotesView extends View
         else
           @updateButton.show()
 
-    @subscribe @updateButton, 'click', ->
-      atom.workspaceView.trigger('application:install-update')
+    @updateButton.on 'click', ->
+      atom.commands.dispatch(atom.views.getView(atom.workspace), 'application:install-update')
 
-    @subscribe @viewReleaseNotesButton, 'click', ->
+    @viewReleaseNotesButton.on 'click', ->
       shell.openExternal('https://atom.io/releases')
 
-    @subscribe @downloadButton, 'click', ->
+    @downloadButton.on 'click', ->
       shell.openExternal('https://atom.io/download/windows')

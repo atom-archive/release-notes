@@ -1,4 +1,3 @@
-shell = require 'shell'
 ReleaseNotesView = null
 ReleaseNoteStatusBar = require  './release-notes-status-bar'
 
@@ -8,11 +7,10 @@ createReleaseNotesView = (uri, version, releaseNotes) ->
   ReleaseNotesView ?= require './release-notes-view'
   new ReleaseNotesView(uri, version, releaseNotes)
 
-deserializer =
+atom.deserializers.add
   name: 'ReleaseNotesView'
   deserialize: ({uri, releaseVersion, releaseNotes}) ->
     createReleaseNotesView(uri, releaseVersion, releaseNotes)
-atom.deserializers.add(deserializer)
 
 module.exports =
   activate: ->
@@ -20,11 +18,12 @@ module.exports =
       previousVersion = localStorage.getItem('release-notes:previousVersion')
       localStorage.setItem('release-notes:previousVersion', atom.getVersion())
 
-      atom.workspaceView.on 'window:update-available', (event, version, releaseNotes) ->
+      atom.commands.add 'atom-workspace', 'window:update-available', (event) ->
+        [version, releaseNotes] = event.detail
         localStorage.setItem("release-notes:version", version)
         localStorage.setItem("release-notes:releaseNotes", releaseNotes)
 
-      atom.workspace.registerOpener (filePath) ->
+      atom.workspace.addOpener (filePath) ->
         return unless filePath is releaseNotesUri
 
         version = localStorage.getItem("release-notes:version")
@@ -33,14 +32,14 @@ module.exports =
 
       createStatusEntry = -> new ReleaseNoteStatusBar(previousVersion)
 
-      if atom.workspaceView.statusBar?
+      if document.querySelector('status-bar')
         createStatusEntry()
       else
-        atom.packages.once 'activated', ->
-          createStatusEntry() if atom.workspaceView.statusBar?
+        atom.packages.onDidActivateAll ->
+          createStatusEntry() if document.querySelector('status-bar')
 
-    atom.workspaceView.command 'release-notes:show', ->
+    atom.commands.add 'atom-workspace', 'release-notes:show', ->
       if atom.isReleasedVersion()
-        atom.workspaceView.open(releaseNotesUri)
+        atom.workspace.open(releaseNotesUri)
       else
-        shell.openExternal('https://atom.io/releases')
+        require('shell').openExternal('https://atom.io/releases')

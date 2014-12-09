@@ -1,6 +1,6 @@
 {
   "name": "release-notes",
-  "main": "./lib/release-notes",
+  "main": "./lib/main",
   "version": "0.36.0",
   "description": "Displays the release notes of Atom in Atom",
   "repository": "https://github.com/atom/release-notes",
@@ -8,5 +8,7 @@
   "engines": {
     "atom": ">0.50.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "space-pen": "^4"
+  }
 }
