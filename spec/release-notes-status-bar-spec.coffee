@@ -1,7 +1,7 @@
 {$} = require 'space-pen'
 
 triggerUpdate = ->
-  atom.commands.dispatch(atom.views.getView(atom.workspace), 'window:update-available', ['v22.0.0', "NOTES"])
+  atom.commands.dispatch(atom.views.getView(atom.workspace), 'window:update-available', ['v22.0.0'])
 
 describe "ReleaseNotesStatusBar", ->
   beforeEach ->
