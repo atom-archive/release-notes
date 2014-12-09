@@ -55,7 +55,7 @@ downloadReleaseNotes = (version) ->
     url: 'https://api.github.com/repos/atom/atom/releases'
     dataType: 'json'
     error: ->
-      placeholderNotes = {version, notes: 'The release notes failed to download.'}
+      placeholderNotes = [{version, notes: 'The release notes failed to download.'}]
       localStorage.setItem('release-notes:releaseNotes', JSON.stringify(placeholderNotes))
     success: (releases) ->
       releases = [] unless Array.isArray(releases)
