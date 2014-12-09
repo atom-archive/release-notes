@@ -16,7 +16,7 @@ class ReleaseNotesStatusBar extends View
       @upgradeText.show() if process.platform is 'win32'
       @attach()
 
-    @subscriptions.add atom.tooltips.add(@element, title: 'Click here to view the release notes')
+    @subscriptions.add atom.tooltips.add(@element, title: 'Click to view the release notes')
     @attach() if previousVersion? and previousVersion isnt atom.getVersion()
 
   attach: ->
