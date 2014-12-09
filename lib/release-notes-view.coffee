@@ -46,9 +46,14 @@ class ReleaseNotesView extends View
       if typeof @releaseNotes is 'string'
         @releaseNotes = [{version: @releaseVersion, notes: @releaseNotes}]
 
-      for {version, notes} in @releaseNotes
+      for {date, notes, version} in @releaseNotes
         @notesContainer.append $$ ->
-          @h1 class: 'section-heading', version
+          if date?
+            @h1 class: 'section-heading', =>
+              @span "#{version} "
+              @small new Date(date).toLocaleString()
+          else
+            @h1 class: 'section-heading', version
           @div class: 'description', =>
             @raw notes
 

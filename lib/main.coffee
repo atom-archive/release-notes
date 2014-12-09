@@ -68,7 +68,10 @@ downloadReleaseNotes = (version) ->
     success: (releases) ->
       releases = [] unless Array.isArray(releases)
       releases.shift() while releases[0]? and releases[0].tag_name isnt "v#{version}"
-      releaseNotes = releases.map ({tag_name, body}) -> {version: tag_name.substring(1), notes: body}
+      releaseNotes = releases.map ({body, published_at, tag_name}) ->
+        date: published_at
+        notes: body
+        version: tag_name.substring(1) # remove leading 'v'
       convertMarkdown releaseNotes, ->
         localStorage.setItem('release-notes:releaseNotes', JSON.stringify(releaseNotes))
 
