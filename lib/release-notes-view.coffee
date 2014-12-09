@@ -50,10 +50,10 @@ class ReleaseNotesView extends View
         @notesContainer.append $$ ->
           if date?
             @h1 class: 'section-heading', =>
-              @span "#{version} "
+              @span class: 'text-highlight', "#{version} "
               @small new Date(date).toLocaleString()
           else
-            @h1 class: 'section-heading', version
+            @h1 class: 'section-heading text-highlight', version
           @div class: 'description', =>
             @raw notes
 
