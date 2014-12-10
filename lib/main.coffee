@@ -1,4 +1,3 @@
-{$} = require 'space-pen'
 {CompositeDisposable} = require 'atom'
 ReleaseNotesView = null
 ReleaseNoteStatusBar = require  './release-notes-status-bar'
