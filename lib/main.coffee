@@ -29,7 +29,7 @@ module.exports =
 
         [version] = event.detail
         localStorage.setItem('release-notes:version', version)
-        downloadReleaseNotes(version)
+        require('./release-notes').fetch(version)
 
       subscriptions.add atom.workspace.addOpener (filePath) ->
         return unless filePath is releaseNotesUri
@@ -57,40 +57,3 @@ module.exports =
 
   deactivate: ->
     subscriptions.dispose()
-
-downloadReleaseNotes = (version) ->
-  $.ajax
-    url: 'https://api.github.com/repos/atom/atom/releases'
-    dataType: 'json'
-    error: ->
-      placeholderNotes = [{version, notes: 'The release notes failed to download.'}]
-      localStorage.setItem('release-notes:releaseNotes', JSON.stringify(placeholderNotes))
-    success: (releases) ->
-      releases = [] unless Array.isArray(releases)
-
-      # Skip any releases after the one that was just downloaded
-      releases.shift() while releases[0]? and releases[0].tag_name isnt "v#{version}"
-
-      releaseNotes = releases.map ({body, published_at, tag_name}) ->
-        date: published_at
-        notes: body
-        version: tag_name.substring(1) # remove leading 'v'
-
-      convertMarkdown releaseNotes, ->
-        localStorage.setItem('release-notes:releaseNotes', JSON.stringify(releaseNotes))
-
-convertMarkdown = (releases, callback) ->
-  releases = releases.slice()
-
-  roaster = require 'roaster'
-  options =
-    sanitize: false
-    breaks: true
-
-  convert = (release) ->
-    return callback() unless release?
-    roaster release.notes, options, (error, html) =>
-      release.notes = html unless error?
-      convert(releases.pop())
-
-  convert(releases.pop())

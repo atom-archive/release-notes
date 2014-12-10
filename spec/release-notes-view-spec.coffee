@@ -33,8 +33,13 @@ describe "ReleaseNotesView", ->
           releaseNotes = $(atom.views.getView(atom.workspace)).find('.release-notes')
           expect(releaseNotes.find('h1').text()).toBe '0.3.0'
 
-    it "displays an error when downloading the release notes fails", ->
-      spyOn($, 'ajax').andCallFake ({error}) -> error(new Error())
+    it "displays an error when downloading the release notes fails and tries to redownload them", ->
+      spyOn($, 'ajax').andCallFake ({error, success}) ->
+        if $.ajax.callCount is 1
+          error(new Error())
+        else
+          success([{tag_name: 'v0.3.0', body: 'a release'}])
+
       atom.commands.dispatch(atom.views.getView(atom.workspace), 'window:update-available', ['0.3.0'])
 
       waitsForPromise ->
@@ -45,3 +50,12 @@ describe "ReleaseNotesView", ->
         releaseNotesView = releaseNotes.view()
         expect(releaseNotes.find('h1').text()).toBe '0.3.0'
         expect(releaseNotes.find('.description').text().length).toBeGreaterThan 0
+
+      waitsFor ->
+        $.ajax.callCount is 2
+
+      runs ->
+        releaseNotes = $(atom.views.getView(atom.workspace)).find('.release-notes')
+        releaseNotesView = releaseNotes.view()
+        expect(releaseNotes.find('h1').text()).toBe '0.3.0'
+        expect(releaseNotes.find('.description').text()).toContain "a release"

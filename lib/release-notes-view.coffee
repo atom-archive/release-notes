@@ -45,16 +45,29 @@ class ReleaseNotesView extends View
       if typeof @releaseNotes is 'string'
         @releaseNotes = [{version: @releaseVersion, notes: @releaseNotes}]
 
-      for {date, notes, version} in @releaseNotes
-        @notesContainer.append $$ ->
-          if date?
-            @h1 class: 'section-heading', =>
-              @span class: 'text-highlight', "#{version} "
-              @small new Date(date).toLocaleString()
-          else
-            @h1 class: 'section-heading text-highlight', version
-          @div class: 'description', =>
-            @raw notes
+      @addReleaseNotes()
+
+      # Try to re-fetch release notes if the last fetch failed
+      if @releaseNotes[0]?.error
+        console.log 're-fetching'
+        require('./release-notes').fetch @releaseVersion, (@releaseNotes) =>
+          @addReleaseNotes()
 
     @updateButton.on 'click', ->
       atom.commands.dispatch(atom.views.getView(atom.workspace), 'application:install-update')
+
+  addReleaseNotes: ->
+    @notesContainer.empty()
+
+    console.log 'adding', @releaseNotes
+
+    for {date, notes, version} in @releaseNotes
+      @notesContainer.append $$ ->
+        if date?
+          @h1 class: 'section-heading', =>
+            @span class: 'text-highlight', "#{version} "
+            @small new Date(date).toLocaleString()
+        else
+          @h1 class: 'section-heading text-highlight', version
+        @div class: 'description', =>
+          @raw notes
