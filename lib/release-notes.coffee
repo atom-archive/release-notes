@@ -31,7 +31,7 @@ convertMarkdown = (releases, callback) ->
 
   roaster = require 'roaster'
   options =
-    sanitize: false
+    sanitize: true
     breaks: true
 
   convert = (release) ->
