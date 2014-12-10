@@ -8,7 +8,6 @@ class ReleaseNotesStatusBar extends View
 
   initialize: (previousVersion) ->
     @subscriptions = new CompositeDisposable()
-    @upgradeText.hide()
 
     @on 'click', -> atom.workspace.open('atom://release-notes')
     @subscriptions.add atom.commands.add 'atom-workspace', 'window:update-available', =>
