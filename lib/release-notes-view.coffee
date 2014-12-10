@@ -49,7 +49,6 @@ class ReleaseNotesView extends View
 
       # Try to re-fetch release notes if the last fetch failed
       if @releaseNotes[0]?.error
-        console.log 're-fetching'
         require('./release-notes').fetch @releaseVersion, (@releaseNotes) =>
           @addReleaseNotes()
 
@@ -58,8 +57,6 @@ class ReleaseNotesView extends View
 
   addReleaseNotes: ->
     @notesContainer.empty()
-
-    console.log 'adding', @releaseNotes
 
     for {date, notes, version} in @releaseNotes
       @notesContainer.append $$ ->
