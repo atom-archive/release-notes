@@ -1,5 +1,6 @@
 shell = require 'shell'
 {View} = require 'space-pen'
+{Disposable} = require 'atom'
 
 module.exports =
 class ReleaseNotesView extends View
@@ -33,6 +34,10 @@ class ReleaseNotesView extends View
     uri: @uri
     releaseNotes: @releaseNotes
     releaseVersion: @releaseVersion
+
+  #TODO Remove both of these post 1.0
+  onDidChangeTitle: -> new Disposable()
+  onDidChangeModified: -> new Disposable()
 
   isChocolateyBuild: ->
     /chocolatey/i.test atom.getLoadSettings().resourcePath
