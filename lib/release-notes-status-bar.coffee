@@ -20,7 +20,7 @@ class ReleaseNotesStatusBar extends View
     @attach() if previousVersion? and previousVersion isnt atom.getVersion()
 
   attach: ->
-    document.querySelector('status-bar').addRightTile(item: this, priority: 100)
+    document.querySelector('status-bar').addRightTile(item: this, priority: -100)
 
   beforeRemove: ->
     @subsriptions.dispose()
