@@ -11,7 +11,6 @@ class ReleaseNotesView extends View
 
       @div class: 'block', =>
         @button class: 'inline-block update-instructions btn btn-success', outlet: 'updateButton', 'Restart and update'
-        @button class: 'inline-block download-instructions btn btn-success', outlet: 'downloadButton', 'Download new version'
         @button class: 'inline-block btn', outlet: 'viewReleaseNotesButton', 'View past release notes'
 
   getTitle: ->
@@ -35,23 +34,14 @@ class ReleaseNotesView extends View
 
   initialize: (@uri, @releaseVersion, @releaseNotes) ->
     @updateButton.hide()
-    @downloadButton.hide()
 
     if @releaseNotes? and @releaseVersion?
       @description.html(@releaseNotes)
       @version.text(@releaseVersion)
-
-      if @releaseVersion isnt atom.getVersion()
-        if process.platform is 'win32'
-            @downloadButton.show()
-        else
-          @updateButton.show()
+      @updateButton.show() if @releaseVersion isnt atom.getVersion()
 
     @updateButton.on 'click', ->
       atom.commands.dispatch(atom.views.getView(atom.workspace), 'application:install-update')
 
     @viewReleaseNotesButton.on 'click', ->
       shell.openExternal('https://atom.io/releases')
-
-    @downloadButton.on 'click', ->
-      shell.openExternal('https://atom.io/download/windows')
