@@ -25,6 +25,9 @@ saveReleaseNotes = (releaseNotes) ->
 createReleaseNotes = (version, releases, callback) ->
   releases = [] unless Array.isArray(releases)
 
+  # Support still showing release notes for manual builds
+  version = version.replace(/-[a-fA-F0-9]{6}$/, '')
+
   # Skip any releases after the one that was just downloaded
   releases.shift() while releases[0]? and releases[0].tag_name isnt "v#{version}"
 
