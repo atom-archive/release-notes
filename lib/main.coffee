@@ -24,7 +24,7 @@ module.exports =
       localStorage.setItem('release-notes:previousVersion', atom.getVersion())
 
       subscriptions.add atom.commands.add 'atom-workspace', 'window:update-available', (event) ->
-        return unless  Array.isArray(event?.detail)
+        return unless Array.isArray(event?.detail)
 
         [version] = event.detail
         if version
