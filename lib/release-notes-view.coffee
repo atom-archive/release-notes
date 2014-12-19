@@ -7,12 +7,6 @@ class ReleaseNotesView extends View
     @div class: 'release-notes padded pane-item native-key-bindings', tabindex: -1, =>
       @div class: 'block', =>
         @button class: 'inline-block update-instructions btn btn-success', outlet: 'updateButton', 'Restart and update'
-
-      @h2 class: 'inline-block', outlet: 'chocolateyText', =>
-        @span 'Run '
-        @code 'cup Atom'
-        @span ' to install the latest Atom release.'
-
       @div class: 'block', =>
         @div outlet: 'notesContainer'
 
