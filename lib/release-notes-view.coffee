@@ -51,7 +51,7 @@ class ReleaseNotesView extends View
       atom.commands.dispatch(atom.views.getView(atom.workspace), 'application:install-update')
 
     @viewReleaseNotesButton.on 'click', ->
-      shell.openExternal('https://atom.io/releases')
+      require('shell').openExternal('https://atom.io/releases')
 
   addReleaseNotes: ->
     @notesContainer.empty()
