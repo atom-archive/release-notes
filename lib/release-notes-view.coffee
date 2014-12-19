@@ -1,17 +1,15 @@
-shell = require 'shell'
-{View} = require 'space-pen'
+{$$, View} = require 'space-pen'
 {Disposable} = require 'atom'
 
 module.exports =
 class ReleaseNotesView extends View
   @content: ->
     @div class: 'release-notes padded pane-item native-key-bindings', tabindex: -1, =>
-      @h1 class: 'section-heading', outlet: 'version'
-      @div class: 'description', outlet: 'description'
-
       @div class: 'block', =>
-        @button class: 'inline-block update-instructions btn btn-success', outlet: 'updateButton', 'Restart and update'
-        @button class: 'inline-block btn', outlet: 'viewReleaseNotesButton', 'View past release notes'
+        @button class: 'inline-block hidden btn btn-success', outlet: 'updateButton', 'Restart and update'
+        @button class: 'inline-block btn', outlet: 'viewReleaseNotesButton', 'View on atom.io'
+      @div class: 'block', =>
+        @div outlet: 'notesContainer'
 
   getTitle: ->
     'Release Notes'
@@ -33,15 +31,41 @@ class ReleaseNotesView extends View
   onDidChangeModified: -> new Disposable()
 
   initialize: (@uri, @releaseVersion, @releaseNotes) ->
-    @updateButton.hide()
+    @releaseVersion ?= atom.getVersion()
 
-    if @releaseNotes? and @releaseVersion?
-      @description.html(@releaseNotes)
-      @version.text(@releaseVersion)
-      @updateButton.show() if @releaseVersion isnt atom.getVersion()
+    # Support old format
+    if typeof @releaseNotes is 'string'
+      @releaseNotes = [{version: @releaseVersion, notes: @releaseNotes, error: true}]
+
+    @releaseNotes ?= []
+
+    @updateButton.show() if @releaseVersion isnt atom.getVersion()
+    @addReleaseNotes()
+    @fetchReleaseNotes()
 
     @updateButton.on 'click', ->
       atom.commands.dispatch(atom.views.getView(atom.workspace), 'application:install-update')
 
     @viewReleaseNotesButton.on 'click', ->
-      shell.openExternal('https://atom.io/releases')
+      require('shell').openExternal('https://atom.io/releases')
+
+  fetchReleaseNotes: ->
+    require('./release-notes').fetch @releaseVersion, (releaseNotes) =>
+      return if releaseNotes.length is 0
+      if @releaseNotes.length is 0 or @releaseNotes[0].error or not releaseNotes[0].error
+        @releaseNotes = releaseNotes
+        @addReleaseNotes()
+
+  addReleaseNotes: ->
+    @notesContainer.empty()
+
+    for {date, notes, version} in @releaseNotes
+      @notesContainer.append $$ ->
+        if date?
+          @h1 class: 'section-heading', =>
+            @span class: 'text-highlight', "#{version} "
+            @small new Date(date).toLocaleString()
+        else
+          @h1 class: 'section-heading text-highlight', version
+        @div class: 'description', =>
+          @raw notes

@@ -9,6 +9,7 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
+    "roaster": "^1.1.2",
     "space-pen": "^4"
   }
 }
