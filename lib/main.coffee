@@ -19,6 +19,8 @@ module.exports =
       localStorage.setItem('release-notes:previousVersion', atom.getVersion())
 
       atom.commands.add 'atom-workspace', 'window:update-available', (event) ->
+        return unless  Array.isArray(event?.detail)
+
         [version, releaseNotes] = event.detail
         localStorage.setItem("release-notes:version", version)
         localStorage.setItem("release-notes:releaseNotes", releaseNotes)
