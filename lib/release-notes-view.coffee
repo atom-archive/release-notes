@@ -39,7 +39,7 @@ class ReleaseNotesView extends View
 
     @releaseNotes ?= []
 
-    @updateButton.show() if @releaseVersion isnt atom.getVersion()
+    @updateButton.removeClass('hidden') if @releaseVersion isnt atom.getVersion()
     @addReleaseNotes()
     @fetchReleaseNotes()
 
