@@ -30,8 +30,8 @@ module.exports =
         localStorage.setItem('release-notes:version', version)
         require('./release-notes').fetch(version)
 
-      subscriptions.add atom.workspace.addOpener (filePath) ->
-        return unless filePath is releaseNotesUri
+      subscriptions.add atom.workspace.addOpener (uriToOpen) ->
+        return unless uriToOpen is releaseNotesUri
 
         version = localStorage.getItem('release-notes:version')
         try
