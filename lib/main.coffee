@@ -27,8 +27,9 @@ module.exports =
         return unless  Array.isArray(event?.detail)
 
         [version] = event.detail
-        localStorage.setItem('release-notes:version', version)
-        require('./release-notes').fetch(version)
+        if version
+          localStorage.setItem('release-notes:version', version)
+          require('./release-notes').fetch(version)
 
       subscriptions.add atom.workspace.addOpener (uriToOpen) ->
         return unless uriToOpen is releaseNotesUri

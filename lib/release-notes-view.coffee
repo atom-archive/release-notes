@@ -41,18 +41,20 @@ class ReleaseNotesView extends View
 
     @updateButton.show() if @releaseVersion isnt atom.getVersion()
     @addReleaseNotes()
-
-    # Try to re-fetch release notes if the last fetch failed or was somehow
-    # empty
-    if @releaseNotes.length is 0 or @releaseNotes[0].error
-      require('./release-notes').fetch @releaseVersion, (@releaseNotes) =>
-        @addReleaseNotes()
+    @fetchReleaseNotes()
 
     @updateButton.on 'click', ->
       atom.commands.dispatch(atom.views.getView(atom.workspace), 'application:install-update')
 
     @viewReleaseNotesButton.on 'click', ->
       require('shell').openExternal('https://atom.io/releases')
+
+  fetchReleaseNotes: ->
+    require('./release-notes').fetch @releaseVersion, (releaseNotes) =>
+      return if releaseNotes.length is 0
+      if @releaseNotes.length is 0 or @releaseNotes[0].error or not releaseNotes[0].error
+        @releaseNotes = releaseNotes
+        @addReleaseNotes()
 
   addReleaseNotes: ->
     @notesContainer.empty()
