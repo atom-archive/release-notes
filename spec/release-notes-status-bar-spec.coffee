@@ -6,6 +6,9 @@ triggerUpdate = ->
 describe "ReleaseNotesStatusBar", ->
   beforeEach ->
     spyOn(atom, 'isReleasedVersion').andReturn(true)
+    storage = {}
+    spyOn(localStorage, 'setItem').andCallFake (key, value) -> storage[key] = value
+    spyOn(localStorage, 'getItem').andCallFake (key) -> storage[key]
 
     jasmine.attachToDOM(atom.views.getView(atom.workspace))
 

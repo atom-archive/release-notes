@@ -3,6 +3,9 @@
 describe "ReleaseNotesView", ->
   beforeEach ->
     spyOn(atom, 'isReleasedVersion').andReturn(true)
+    storage = {}
+    spyOn(localStorage, 'setItem').andCallFake (key, value) -> storage[key] = value
+    spyOn(localStorage, 'getItem').andCallFake (key) -> storage[key]
 
     waitsForPromise ->
       atom.packages.activatePackage('release-notes')
