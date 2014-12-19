@@ -38,7 +38,7 @@ module.exports =
           releaseNotes = JSON.parse(localStorage.getItem('release-notes:releaseNotes')) ? []
         catch error
           releaseNotes = []
-        createReleaseNotesView(filePath, version, releaseNotes)
+        createReleaseNotesView(releaseNotesUri, version, releaseNotes)
 
       createStatusEntry = -> new ReleaseNoteStatusBar(previousVersion)
 

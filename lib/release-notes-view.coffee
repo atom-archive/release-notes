@@ -42,8 +42,9 @@ class ReleaseNotesView extends View
 
       @addReleaseNotes()
 
-      # Try to re-fetch release notes if the last fetch failed
-      if @releaseNotes[0]?.error
+      # Try to re-fetch release notes if the last fetch failed or was somehow
+      # empty
+      if @releaseNotes.length is 0 or @releaseNotes[0].error
         require('./release-notes').fetch @releaseVersion, (@releaseNotes) =>
           @addReleaseNotes()
 
