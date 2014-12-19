@@ -6,7 +6,7 @@ class ReleaseNotesView extends View
   @content: ->
     @div class: 'release-notes padded pane-item native-key-bindings', tabindex: -1, =>
       @div class: 'block', =>
-        @button class: 'inline-block update-instructions btn btn-success', outlet: 'updateButton', 'Restart and update'
+        @button class: 'inline-block hidden btn btn-success', outlet: 'updateButton', 'Restart and update'
         @button class: 'inline-block btn', outlet: 'viewReleaseNotesButton', 'View on atom.io'
       @div class: 'block', =>
         @div outlet: 'notesContainer'
@@ -31,22 +31,22 @@ class ReleaseNotesView extends View
   onDidChangeModified: -> new Disposable()
 
   initialize: (@uri, @releaseVersion, @releaseNotes) ->
-    @updateButton.hide()
+    @releaseVersion ?= atom.getVersion()
 
-    if @releaseNotes? and @releaseVersion?
-      @updateButton.show() if @releaseVersion isnt atom.getVersion()
+    # Support old format
+    if typeof @releaseNotes is 'string'
+      @releaseNotes = [{version: @releaseVersion, notes: @releaseNotes, error: true}]
 
-      # Support old format
-      if typeof @releaseNotes is 'string'
-        @releaseNotes = [{version: @releaseVersion, notes: @releaseNotes, error: true}]
+    @releaseNotes ?= []
 
-      @addReleaseNotes()
+    @updateButton.show() if @releaseVersion isnt atom.getVersion()
+    @addReleaseNotes()
 
-      # Try to re-fetch release notes if the last fetch failed or was somehow
-      # empty
-      if @releaseNotes.length is 0 or @releaseNotes[0].error
-        require('./release-notes').fetch @releaseVersion, (@releaseNotes) =>
-          @addReleaseNotes()
+    # Try to re-fetch release notes if the last fetch failed or was somehow
+    # empty
+    if @releaseNotes.length is 0 or @releaseNotes[0].error
+      require('./release-notes').fetch @releaseVersion, (@releaseNotes) =>
+        @addReleaseNotes()
 
     @updateButton.on 'click', ->
       atom.commands.dispatch(atom.views.getView(atom.workspace), 'application:install-update')
