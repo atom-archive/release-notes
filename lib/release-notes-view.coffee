@@ -38,7 +38,7 @@ class ReleaseNotesView extends View
 
       # Support old format
       if typeof @releaseNotes is 'string'
-        @releaseNotes = [{version: @releaseVersion, notes: @releaseNotes}]
+        @releaseNotes = [{version: @releaseVersion, notes: @releaseNotes, error: true}]
 
       @addReleaseNotes()
 
