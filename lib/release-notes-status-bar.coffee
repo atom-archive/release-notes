@@ -18,5 +18,5 @@ class ReleaseNotesStatusBar extends View
   attach: ->
     document.querySelector('status-bar').addRightTile(item: this, priority: -100)
 
-  beforeRemove: ->
-    @subsriptions.dispose()
+  detached: ->
+    @subsriptions?.dispose()
