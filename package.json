@@ -10,6 +10,6 @@
   },
   "dependencies": {
     "roaster": "^1.1.2",
-    "space-pen": "^4"
+    "space-pen": "^5.0.0"
   }
 }
