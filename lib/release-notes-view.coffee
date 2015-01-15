@@ -17,7 +17,7 @@ class ReleaseNotesView extends View
   getIconName: ->
     'squirrel'
 
-  getUri: ->
+  getURI: ->
     @uri
 
   serialize: ->

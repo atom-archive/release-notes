@@ -46,7 +46,7 @@ module.exports =
       if document.querySelector('status-bar')
         createStatusEntry()
       else
-        subscriptions.add atom.packages.onDidActivateAll ->
+        subscriptions.add atom.packages.onDidActivateInitialPackages ->
           createStatusEntry() if document.querySelector('status-bar')
 
     subscriptions.add atom.commands.add 'atom-workspace', 'release-notes:show', ->
