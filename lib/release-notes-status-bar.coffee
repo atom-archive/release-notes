@@ -6,7 +6,7 @@ class ReleaseNotesStatusBar extends View
   @content: ->
     @span type: 'button', class: 'release-notes-status icon icon-squirrel inline-block'
 
-  initialize: (previousVersion) ->
+  initialize: (@statusBar, previousVersion) ->
     @subscriptions = new CompositeDisposable()
 
     @on 'click', -> atom.workspace.open('atom://release-notes')
@@ -16,7 +16,7 @@ class ReleaseNotesStatusBar extends View
     @attach() if previousVersion? and previousVersion isnt atom.getVersion()
 
   attach: ->
-    document.querySelector('status-bar').addRightTile(item: this, priority: -100)
+    @statusBar.addRightTile(item: this, priority: -100)
 
   detached: ->
     @subsriptions?.dispose()
