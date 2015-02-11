@@ -1,4 +1,4 @@
-{$$, View} = require 'space-pen'
+{$$, View} = require 'atom-space-pen-views'
 {Disposable} = require 'atom'
 
 module.exports =

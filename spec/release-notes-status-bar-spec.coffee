@@ -1,4 +1,4 @@
-{$} = require 'space-pen'
+{$} = require 'atom-space-pen-views'
 
 triggerUpdate = ->
   atom.commands.dispatch(atom.views.getView(atom.workspace), 'window:update-available', ['v22.0.0'])

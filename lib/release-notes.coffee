@@ -1,4 +1,4 @@
-{$} = require 'space-pen'
+{$} = require 'atom-space-pen-views'
 
 module.exports =
   fetch: (version, callback) -> downloadReleaseNotes(version, callback)

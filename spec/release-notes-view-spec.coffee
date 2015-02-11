@@ -1,4 +1,4 @@
-{$} = require 'space-pen'
+{$} = require 'atom-space-pen-views'
 
 describe "ReleaseNotesView", ->
   beforeEach ->
