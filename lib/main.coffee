@@ -20,9 +20,6 @@ module.exports =
     subscriptions = new CompositeDisposable()
 
     if atom.isReleasedVersion()
-      previousVersion = localStorage.getItem('release-notes:previousVersion')
-      localStorage.setItem('release-notes:previousVersion', atom.getVersion())
-
       subscriptions.add atom.commands.add 'atom-workspace', 'window:update-available', (event) ->
         return unless Array.isArray(event?.detail)
 
@@ -41,14 +38,6 @@ module.exports =
           releaseNotes = []
         createReleaseNotesView(releaseNotesUri, version, releaseNotes)
 
-      createStatusEntry = -> new ReleaseNoteStatusBar(previousVersion)
-
-      if document.querySelector('status-bar')
-        createStatusEntry()
-      else
-        subscriptions.add atom.packages.onDidActivateInitialPackages ->
-          createStatusEntry() if document.querySelector('status-bar')
-
     subscriptions.add atom.commands.add 'atom-workspace', 'release-notes:show', ->
       if atom.isReleasedVersion()
         atom.workspace.open(releaseNotesUri)
@@ -57,3 +46,8 @@ module.exports =
 
   deactivate: ->
     subscriptions.dispose()
+
+  consumeStatusBar: (statusBar) ->
+    previousVersion = localStorage.getItem('release-notes:previousVersion')
+    localStorage.setItem('release-notes:previousVersion', atom.getVersion())
+    new ReleaseNoteStatusBar(statusBar, previousVersion)

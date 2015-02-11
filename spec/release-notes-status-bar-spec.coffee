@@ -22,11 +22,11 @@ describe "ReleaseNotesStatusBar", ->
       atom.workspace.open('sample.js')
 
   describe "with no update", ->
-    it "does not show view", ->
+    it "does not show the view", ->
       expect(atom.views.getView(atom.workspace)).not.toContain('.release-notes-status')
 
   describe "with an update", ->
-    it "show the view when the update is made available", ->
+    it "shows the view when the update is made available", ->
       triggerUpdate()
       expect(atom.views.getView(atom.workspace)).toContain('.release-notes-status')
 
