@@ -48,6 +48,8 @@ module.exports =
     subscriptions.dispose()
 
   consumeStatusBar: (statusBar) ->
+    return unless atom.isReleasedVersion()
+
     previousVersion = localStorage.getItem('release-notes:previousVersion')
     localStorage.setItem('release-notes:previousVersion', atom.getVersion())
     new ReleaseNoteStatusBar(statusBar, previousVersion)
