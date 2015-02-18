@@ -19,4 +19,4 @@ class ReleaseNotesStatusBar extends View
     @statusBar.addRightTile(item: this, priority: -100)
 
   detached: ->
-    @subsriptions?.dispose()
+    @subscriptions?.dispose()
