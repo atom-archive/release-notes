@@ -1,6 +1,5 @@
 {CompositeDisposable} = require 'atom'
 ReleaseNotesView = null
-ReleaseNoteStatusBar = require  './release-notes-status-bar'
 
 releaseNotesUri = 'atom://release-notes'
 
@@ -52,4 +51,5 @@ module.exports =
 
     previousVersion = localStorage.getItem('release-notes:previousVersion')
     localStorage.setItem('release-notes:previousVersion', atom.getVersion())
+    ReleaseNoteStatusBar = require './release-notes-status-bar'
     new ReleaseNoteStatusBar(statusBar, previousVersion)
