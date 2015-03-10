@@ -1,7 +1,7 @@
 {
   "name": "release-notes",
   "main": "./lib/main",
-  "version": "0.51.0",
+  "version": "0.52.0",
   "description": "Displays the release notes of Atom in Atom",
   "repository": "https://github.com/atom/release-notes",
   "license": "MIT",
