@@ -89,3 +89,26 @@ describe "ReleaseNotesView", ->
         releaseNotesView = releaseNotes.view()
         expect(releaseNotes.find('h1').text()).toBe '0.3.0'
         expect(releaseNotes.find('.description').text()).toContain "a release"
+
+    describe "when scrolling with core:page-up and core:page-down", ->
+      releaseNotesView = null
+      beforeEach ->
+        spyOn($, 'ajax').andCallFake ({success}) -> success([{tag_name: 'v0.3.0', body: 'a release'}])
+        atom.commands.dispatch(atom.views.getView(atom.workspace), 'window:update-available', ['0.3.0'])
+
+        waitsForPromise ->
+          atom.workspace.open('atom://release-notes')
+
+        runs ->
+          releaseNotes = $(atom.views.getView(atom.workspace)).find('.release-notes')
+          releaseNotesView = releaseNotes.view()
+
+      it "handles core:page-down", ->
+          spyOn(releaseNotesView, 'pageDown')
+          atom.commands.dispatch(releaseNotesView.element, 'core:page-down')
+          expect(releaseNotesView.pageDown).toHaveBeenCalled()
+
+      it "handles core:page-up", ->
+          spyOn(releaseNotesView, 'pageUp')
+          atom.commands.dispatch(releaseNotesView.element, 'core:page-up')
+          expect(releaseNotesView.pageUp).toHaveBeenCalled()

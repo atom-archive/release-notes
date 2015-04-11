@@ -1,8 +1,8 @@
-{$$, View} = require 'atom-space-pen-views'
+{$$, ScrollView} = require 'atom-space-pen-views'
 {Disposable} = require 'atom'
 
 module.exports =
-class ReleaseNotesView extends View
+class ReleaseNotesView extends ScrollView
   @content: ->
     @div class: 'release-notes padded pane-item native-key-bindings', tabindex: -1, =>
       @div class: 'block', =>
@@ -31,6 +31,7 @@ class ReleaseNotesView extends View
   onDidChangeModified: -> new Disposable()
 
   initialize: (@uri, @releaseVersion, @releaseNotes) ->
+    super
     @releaseVersion ?= atom.getVersion()
 
     # Support old format
