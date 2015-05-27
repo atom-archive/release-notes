@@ -50,7 +50,7 @@ convertMarkdown = (releases, callback) ->
 
   convert = (release) ->
     return callback() unless release?
-    roaster release.notes, options, (error, html) =>
+    roaster release.notes, options, (error, html) ->
       release.notes = html unless error?
       convert(releases.pop())
 
