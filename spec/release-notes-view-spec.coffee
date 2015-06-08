@@ -104,11 +104,11 @@ describe "ReleaseNotesView", ->
           releaseNotesView = releaseNotes.view()
 
       it "handles core:page-down", ->
-          spyOn(releaseNotesView, 'pageDown')
-          atom.commands.dispatch(releaseNotesView.element, 'core:page-down')
-          expect(releaseNotesView.pageDown).toHaveBeenCalled()
+        spyOn(releaseNotesView, 'pageDown')
+        atom.commands.dispatch(releaseNotesView.element, 'core:page-down')
+        expect(releaseNotesView.pageDown).toHaveBeenCalled()
 
       it "handles core:page-up", ->
-          spyOn(releaseNotesView, 'pageUp')
-          atom.commands.dispatch(releaseNotesView.element, 'core:page-up')
-          expect(releaseNotesView.pageUp).toHaveBeenCalled()
+        spyOn(releaseNotesView, 'pageUp')
+        atom.commands.dispatch(releaseNotesView.element, 'core:page-up')
+        expect(releaseNotesView.pageUp).toHaveBeenCalled()
