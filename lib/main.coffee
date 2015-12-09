@@ -1,17 +1,7 @@
 {CompositeDisposable} = require 'atom'
-ReleaseNotesView = null
 
 releaseNotesUri = 'atom://release-notes'
-
-createReleaseNotesView = (uri, version, releaseNotes) ->
-  ReleaseNotesView ?= require './release-notes-view'
-  new ReleaseNotesView(uri, version, releaseNotes)
-
-atom.deserializers.add
-  name: 'ReleaseNotesView'
-  deserialize: ({uri, releaseVersion, releaseNotes}) ->
-    createReleaseNotesView(uri, releaseVersion, releaseNotes)
-
+ReleaseNotesView = null
 subscriptions = null
 
 module.exports =
@@ -35,7 +25,8 @@ module.exports =
           releaseNotes = JSON.parse(localStorage.getItem('release-notes:releaseNotes')) ? []
         catch error
           releaseNotes = []
-        createReleaseNotesView(releaseNotesUri, version, releaseNotes)
+        ReleaseNotesView ?= require './release-notes-view'
+        new ReleaseNotesView(releaseNotesUri, version, releaseNotes)
 
     subscriptions.add atom.commands.add 'atom-workspace', 'release-notes:show', ->
       if atom.isReleasedVersion()
